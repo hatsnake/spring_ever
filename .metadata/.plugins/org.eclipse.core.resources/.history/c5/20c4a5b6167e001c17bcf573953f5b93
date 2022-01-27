@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+	<insert id="register">
+		INSERT INTO E_MEMBER (
+			MNO,
+			MID,
+			MPASSWORD,
+			MNICKNAME,
+			MNAME,
+			MBIRTH,
+			MGENDER,
+			MEMAIL,
+			MPHONE,
+			MINSERTDATE,
+			MINSERTIP
+		) VALUES ( 
+			E_MEMBER_SEQ.nextval,
+			#{mid},
+			#{
+		)
+	</insert>
+</mapper>

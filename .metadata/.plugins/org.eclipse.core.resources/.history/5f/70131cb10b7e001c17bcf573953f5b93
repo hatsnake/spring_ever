@@ -1,0 +1,69 @@
+package com.hatsnake.ever.member.vo;
+
+import java.util.Date;
+
+public class MemberVO {
+	private int mno;
+	private String mid;
+	private String mpassword;
+	private String mnickname;
+	private String mname;
+	private Date mbirth;
+	private String mgender;
+	private String memail;
+	private String mphone;
+	private int mzip;
+	private String maddr1;
+	private String maddr2;
+	private int mvisitedcount;
+	private int mcommentcount;
+	private int mboardcount;
+	private String mauthid;
+	private Date minsertdate;
+	private String minsertip;
+	private Date mupdatedate;
+	private String mupdateip;
+	private String mupdateid;
+	private String mdeleteyn;
+	private Date mdeletedate;
+	private String mdeleteid;
+	
+	public MemberVO() {
+		
+	}
+
+	public MemberVO(int mno, String mid, String mpassword, 
+					String mnickname, String mname, Date mbirth, 
+					String mgender, String memail, String mphone, 
+					int mzip, String maddr1, String maddr2, 
+					int mvisitedcount, int mcommentcount, int mboardcount, 
+					String mauthid, Date minsertdate, String minsertip, 
+					Date mupdatedate, String mupdateip, String mupdateid, 
+					String mdeleteyn, Date mdeletedate, String mdeleteid) {
+		this.mno = mno;
+		this.mid = mid;
+		this.mpassword = mpassword;
+		this.mnickname = mnickname;
+		this.mname = mname;
+		this.mbirth = mbirth;
+		this.mgender = mgender;
+		this.memail = memail;
+		this.mphone = mphone;
+		this.mzip = mzip;
+		this.maddr1 = maddr1;
+		this.maddr2 = maddr2;
+		this.mvisitedcount = mvisitedcount;
+		this.mcommentcount = mcommentcount;
+		this.mboardcount = mboardcount;
+		this.mauthid = mauthid;
+		this.minsertdate = minsertdate;
+		this.minsertip = minsertip;
+		this.mupdatedate = mupdatedate;
+		this.mupdateip = mupdateip;
+		this.mupdateid = mupdateid;
+		this.mdeleteyn = mdeleteyn;
+		this.mdeletedate = mdeletedate;
+		this.mdeleteid = mdeleteid;
+	}
+	
+}

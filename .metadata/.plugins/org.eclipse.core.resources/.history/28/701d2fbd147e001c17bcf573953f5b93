@@ -1,0 +1,5 @@
+package com.hatsnake.ever.member.service;
+
+public class MemberServiceImpl implements MemberService {
+
+}

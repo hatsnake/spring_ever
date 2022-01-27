@@ -1,0 +1,13 @@
+package com.hatsnake.ever.member.service;
+
+import java.util.List;
+
+import com.hatsnake.ever.member.vo.MemberVO;
+
+public interface MemberService {
+	// 회원가입
+	public void register(MemberVO member) throws Exception;
+	
+	// 로그인
+	public List<MemberVO> login(MemberVO member) throws Exception;
+}

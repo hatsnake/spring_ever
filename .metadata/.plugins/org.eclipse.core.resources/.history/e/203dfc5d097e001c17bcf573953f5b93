@@ -1,0 +1,5 @@
+package com.hatsnake.ever.member.controller;
+
+public class MemberController {
+
+}

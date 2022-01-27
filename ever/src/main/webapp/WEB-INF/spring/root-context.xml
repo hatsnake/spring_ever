@@ -28,4 +28,6 @@
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
     </bean>
     
+    <!-- component-scan -->
+    <context:component-scan base-package="com.hatsnake.ever.member.**"></context:component-scan>
 </beans>

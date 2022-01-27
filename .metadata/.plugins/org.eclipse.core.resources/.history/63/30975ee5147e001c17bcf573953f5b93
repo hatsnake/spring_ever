@@ -1,0 +1,18 @@
+package com.hatsnake.ever.member.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.hatsnake.ever.member.vo.MemberVO;
+
+public class MemberServiceImpl implements MemberService {
+
+	private static Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
+	
+	@Override
+	public void register(MemberVO member) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

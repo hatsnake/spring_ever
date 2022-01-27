@@ -1,0 +1,78 @@
+package com.hatsnake.ever.member.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.hatsnake.ever.member.vo.MemberVO;
+
+@Controller
+public class MemberController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+	
+	@GetMapping("/member/login")
+	public String loginForm() throws Exception {
+		return "member/login";
+	}
+
+	@GetMapping("/member/register")
+	public String registerForm() throws Exception {
+		return "member/register";
+	}
+
+	@PostMapping("/member/register")
+	public String register(MemberVO member, HttpServletRequest request) throws Exception {
+		System.out.println(member);
+
+		String ip = etRemoteAddr(request);
+		System.out.println("ip : " + ip);
+		
+		return "redirect:/member/login";
+	}	
+	
+
+	public static String etRemoteAddr(HttpServletRequest request) {
+	        String ip = null;
+	        ip = request.getHeader("X-Forwarded-For");
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("Proxy-Client-IP"); 
+	        } 
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("WL-Proxy-Client-IP"); 
+	        } 
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("HTTP_CLIENT_IP"); 
+	        } 
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("HTTP_X_FORWARDED_FOR"); 
+	        }
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("X-Real-IP"); 
+	        }
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("X-RealIP"); 
+	        }
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getHeader("REMOTE_ADDR");
+	
+	        }
+	
+	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	            ip = request.getRemoteAddr(); 
+	        }
+			return ip;
+	}
+	
+}

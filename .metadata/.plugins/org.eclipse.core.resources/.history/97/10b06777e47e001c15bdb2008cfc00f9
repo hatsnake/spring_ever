@@ -1,0 +1,46 @@
+package com.hatsnake.ever.member.dao;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import com.hatsnake.ever.member.vo.MemberVO;
+
+@Repository
+public class MemberDAOImpl implements MemberDAO {
+
+	private static Logger logger = LoggerFactory.getLogger(MemberDAOImpl.class);
+	
+	@Inject
+	private SqlSession sqlSession;
+	
+	// 회원가입
+	@Override
+	public void register(MemberVO member) throws Exception {
+		logger.info("MemberDAOImpl.register() 함수 시작");
+		
+		sqlSession.insert("memberMapper.register", member);
+	}
+
+	// 로그인
+	@Override
+	public List<MemberVO> login(MemberVO member) throws Exception {
+		logger.info("MemberDAOImpl.login() 함수 시작");
+		
+		return sqlSession.selectList("memberMapper.login", member);
+	}
+
+	// 회원정보 수정
+	@Override
+	public int memberUpdate(MemberVO member) throws Exception {
+		logger.info("MemberDAOImpl.memberUpdate() 함수 시작");
+		
+		return sqlSession.update("memberMapper.memberUpdate", member);
+	}
+	
+}

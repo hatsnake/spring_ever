@@ -1,0 +1,33 @@
+package com.hatsnake.ever.member.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.hatsnake.ever.member.vo.MemberVO;
+
+@Controller
+public class MemberController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+	
+	@GetMapping("/member/login")
+	public String loginForm() throws Exception {
+		return "member/login";
+	}
+
+	@GetMapping("/member/register")
+	public String registerForm() throws Exception {
+		return "member/register";
+	}
+
+	@PostMapping("/member/register")
+	public void register(MemberVO member) throws Exception {
+		System.out.println(member);
+		
+		return "redirect:/member/login";
+	}	
+	
+}
