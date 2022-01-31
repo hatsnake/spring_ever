@@ -163,10 +163,10 @@
 
 <body>
 
-  <jsp:include page="/header" />
-  <jsp:include page="/sidebar" />
+<c:import url="/header"></c:import>
+<c:import url="/sidebar"></c:import>
 
-  <main id="main" class="main">
+<main id="main" class="main">
 
     <div class="pagetitle" style="width:760px; margin:0 auto;">
       <h1>Profile</h1>
@@ -478,9 +478,10 @@
       </div>
     </section>
 
-  </main><!-- End #main -->
+</main><!-- End #main -->
 
-  <jsp:include page="/footer" />
+<c:import url="/footer"></c:import>
+
 </body>
 
 </html>

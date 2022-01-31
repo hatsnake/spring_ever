@@ -1,0 +1,5 @@
+package com.hatsnake.ever.article.controller;
+
+public class ArticleController {
+
+}

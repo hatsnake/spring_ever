@@ -23,8 +23,6 @@
 <link href="/assets/css/style.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>   
 
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
 <script>
 	$(document).ready(function() {
 		$(".header-login-btn").on("click", function() {
@@ -137,7 +135,7 @@
 
 	  <c:if test="${member == null}">
 	      <li class="nav-item dropdown">
-		    <a class="nav-link nav-icon" href="#">
+		    <a class="nav-link nav-icon" href="/member/login">
 			  <div class="btn btn-success btn-sm header-login-btn" style="border-radius:0px;">로그인</div>
 	        </a>
 	      </li>

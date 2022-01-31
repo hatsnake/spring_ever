@@ -24,7 +24,7 @@ import com.hatsnake.ever.member.vo.MemberVO;
 @Controller
 public class MemberController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+	private final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	@Inject
 	private MemberService memberService;

@@ -30,4 +30,5 @@
     
     <!-- component-scan -->
     <context:component-scan base-package="com.hatsnake.ever.member.**"></context:component-scan>
+    <context:component-scan base-package="com.hatsnake.ever.article.**"></context:component-scan>
 </beans>

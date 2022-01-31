@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
+<footer id="footer" class="footer" style="border-top: none;">
   <div class="copyright">
     &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
   </div>
@@ -29,4 +29,3 @@
 
 <!-- Template Main JS File -->
 <script src="/assets/js/main.js"></script>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
