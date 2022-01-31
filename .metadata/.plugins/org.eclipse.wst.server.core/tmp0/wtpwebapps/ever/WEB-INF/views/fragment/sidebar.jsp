@@ -7,9 +7,9 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-      <a class="nav-link " href="index.html">
+      <a class="nav-link " href="/article/list">
         <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
+        <span>전체게시물</span>
       </a>
     </li><!-- End Dashboard Nav -->
 

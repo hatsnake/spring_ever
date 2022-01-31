@@ -252,7 +252,7 @@
                   <h3 class="card-title">프로필</h3>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-2 label ">아이디</div>
+                    <div class="col-lg-3 col-md-2 label ">별명(아이디)</div>
                     <div class="col-lg-9 col-md-10">${m.mnickname} (${m.mid})</div>
                   </div>
 

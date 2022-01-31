@@ -26,6 +26,13 @@
 		display: inline-block;
 	}
 </style>
+<script>
+	$(document).ready(function() {
+		$("#writeBtn").click(function() {
+			location.href="/article/write";
+		});
+	});
+</script>
 </head>
 <body>
 
@@ -136,6 +143,8 @@
 			  </div>
 			</div>
 		<div>
+		
+		<div id="writeBtn" class="btn btn-success btn-sm">글쓰기</div>
 
 	</div>
 

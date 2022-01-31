@@ -22,11 +22,10 @@
 
 <body>
 
-  <jsp:include page="/header" />
-  
-  <jsp:include page="/sidebar" />
+<c:import url="/header"></c:import>
+<c:import url="/sidebar"></c:import>
 
-  <main id="main" class="main">
+<main id="main" class="main">
 
     <div class="pagetitle">
       <h1>Dashboard</h1>
@@ -672,33 +671,10 @@
       </div>
     </section>
 
-  </main><!-- End #main -->
+</main><!-- End #main -->
 
-  <jsp:include page="/footer" />
+<c:import url="/footer"></c:import>
 
 </body>
 
 </html>
-
-<!--  
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
-<h1>
-	Hello world!  
-</h1>
-
-<c:if test="${member == null}">
-	<a href="/member/register">회원가입</a>
-	<a href="/member/login">로그인</a>
-</c:if>
-<c:if test="${member != null}">
-	<p>${member.mid}님 환영합니다.</p>
-</c:if>
-
-<P>  The time on the server is ${serverTime}. </P>
-</body>
-</html>
--->
