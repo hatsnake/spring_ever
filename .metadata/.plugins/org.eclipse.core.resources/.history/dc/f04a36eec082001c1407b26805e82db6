@@ -1,0 +1,16 @@
+package com.hatsnake.ever.article.dao;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ArticleDAOImpl implements ArticleDAO {
+
+	private final Logger logger = LoggerFactory.getLogger(ArticleDAOImpl.class);
+	
+	@Override
+	public int articleWrite() throws Exception {
+		return ;
+	}
+
+}

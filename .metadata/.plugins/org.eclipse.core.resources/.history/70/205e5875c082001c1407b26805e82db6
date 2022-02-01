@@ -1,0 +1,5 @@
+package com.hatsnake.ever.article.dao;
+
+public class ArticleDAOImpl implements ArticleDAO {
+
+}

@@ -1,0 +1,8 @@
+package com.hatsnake.ever.article.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ArticleDAOImpl implements ArticleDAO {
+
+}

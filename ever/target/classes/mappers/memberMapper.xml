@@ -4,6 +4,7 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="memberMapper">
+
 	<insert id="register">
 		INSERT INTO E_MEMBER (
 			MNO,
@@ -61,4 +62,5 @@
 		WHERE MDELETEYN = 'N'
 		AND   MNO = #{mno}
 	</select>
+	
 </mapper>

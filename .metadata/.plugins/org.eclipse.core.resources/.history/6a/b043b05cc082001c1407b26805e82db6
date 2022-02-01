@@ -1,0 +1,6 @@
+package com.hatsnake.ever.member.dao;
+
+public interface ArticleDAO {
+	// 글 작성
+	private int articleWrite();
+}

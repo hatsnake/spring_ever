@@ -1,0 +1,6 @@
+package com.hatsnake.ever.article.dao;
+
+public interface ArticleDAO {
+	// 글 작성
+	public int articleWrite(ArticleVO article) throws Exception;
+}

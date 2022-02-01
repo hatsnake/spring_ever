@@ -1,0 +1,11 @@
+package com.hatsnake.ever.article.service;
+
+public class ArticleServiceImpl implements ArticleService {
+
+	@Override
+	public void articleWrite() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+}

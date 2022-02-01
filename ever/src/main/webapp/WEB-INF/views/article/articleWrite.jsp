@@ -25,7 +25,22 @@
 
 	<script>
 		$(document).ready(function() {
-			//여기 아래 부분
+
+			$("#writeBtn").on("click", function() {
+				const count = $(".hashtag").length;
+				let hashtagText = "";
+				for(let i=0; i<count; i++) {
+					hashtagText += $(".hashtag").get(i).textContent + ",";
+				}
+				
+				$("#btag").val(hashtagText.slice(0, -1));
+				
+				const writeForm = $("#writeForm"); 
+				writeForm.attr("action", "/article/write");
+				writeForm.attr("method", "post");
+				writeForm.submit();
+			});
+			
 			$('#summernote').summernote({
 				  height: 300,                 // 에디터 높이
 				  minHeight: null,             // 최소 높이
@@ -51,6 +66,7 @@
 			});
 			
 			$(".note-statusbar").hide();
+			
 		});
 		
 		// 특수문자 입력 방지
@@ -81,17 +97,20 @@
 	<div style="width:862px; margin:0 auto;">
 		<div class="clearfix">
 			<div class="float-start fw-bold fs-3" style="line-height:40px;">카페 글쓰기</div>
-			<div class="float-end btn btn-success">등록</div>
+			<div id="writeBtn" class="float-end btn btn-success">등록</div>
 		</div>
 		<hr>
-		<form method="post">
+		<form id="writeForm" name="writeForm">
+			<input type="hidden" name="bwriter" value="${member.mid}">
+			<input type="hidden" name="binsertid" value="${member.mid}">
+			<input type="hidden" id="btag" name="btag">
 			<div class="row mb-2">
-				<select class="form-select me-2" name="select1" style="width:630px; margin-left:12px;">
+				<select class="form-select me-2" name="bcategoryno" style="width:630px; margin-left:12px;">
 					<option value="1" selected>1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 				</select>
-				<select class="form-select" name="select1" style="width:224px;">
+				<select class="form-select" name="bcategorynoref" style="width:224px;">
 					<option value="1" selected>1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
@@ -101,7 +120,7 @@
 			<div class="mt-2">
 				<textarea id="summernote" name="bcontent"></textarea>
 				<div>
-					<input type="text" data-role="tagsinput" value="#jQuery,#Script,#Net">
+					<input type="text" data-role="tagsinput" value="">
 				</div>
 			</div>
 		</form>

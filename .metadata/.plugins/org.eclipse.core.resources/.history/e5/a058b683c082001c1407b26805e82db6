@@ -1,0 +1,6 @@
+package com.hatsnake.ever.article.service;
+
+public interface ArticleService {
+	// 글 작성
+	public void articleWrite() throws Exception;
+}

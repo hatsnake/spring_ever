@@ -1,0 +1,5 @@
+package com.hatsnake.ever.article.vo;
+
+public class ArticleVO {
+
+}

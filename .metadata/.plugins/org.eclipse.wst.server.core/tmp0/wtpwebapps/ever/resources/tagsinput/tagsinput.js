@@ -8,7 +8,7 @@
 
   var defaultOptions = {
     tagClass: function(item) {
-      return 'badge badge-light text-dark';
+      return 'badge badge-light text-dark hashtag';
     },
     focusClass: 'focus',
     itemValue: function(item) {
@@ -143,8 +143,10 @@
       self.itemsArray.push(item);
 
       // add a tag element
-
-      var $tag = $('<span class="' + htmlEncode(tagClass) + (itemTitle !== null ? ('" title="' + itemTitle) : '') + '">' + htmlEncode(itemText) + '<span data-role="remove"></span></span>');
+	  // 수정
+      var $tag = $(`
+      	<span class="${htmlEncode(tagClass) + (itemTitle !== null ? ('" title="' + itemTitle) : '')}">#${htmlEncode(itemText)}<span data-role="remove"></span></span>
+      `);
       $tag.data('item', item);
       self.findInputWrapper().before($tag);
 
