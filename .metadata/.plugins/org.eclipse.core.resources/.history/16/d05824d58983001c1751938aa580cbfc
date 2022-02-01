@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="articleMapper">
+
+	<insert id="articleWrite" parameterType="articleVO" useGeneratedKeys="true" keyColumn="ano" keyProperty="ano">
+		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
+			SELECT E_ARTICLE_SEQ.NEXTVAL AS ano FROM DUAL
+		</selectKey>
+		
+		INSERT INTO E_ARTICLE ( 
+			ANO,
+		    ATITLE,
+			ACONTENT,
+			AWRITER,
+			ACATEGORYNO,
+			ACATEGORYNOREF,
+			AINSERTDATE,
+			AINSERTIP,
+			AINSERTID
+		) VALUES (
+			E_ARTICLE_SEQ.NEXTVAL,
+			#{atitle},
+			#{acontent},
+			#{awriter},
+			#{acategoryno},
+			#{acategorynoref},
+			SYSDATE,
+			#{ainsertip},
+			#{ainsertid}
+		)
+	</insert>
+	
+	<select id="articleView" resultType="articleVO">
+		SELECT * FROM E_ARTICLE
+		WHERE ANO = #{ano}
+	</select>
+
+</mapper>

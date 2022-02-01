@@ -1,5 +1,0 @@
-package com.hatsnake.ever.member.service;
-
-public interface MemberService {
-
-}

@@ -18,8 +18,8 @@
 	
 	<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 	<link href="/tagsinput/tagsinput.css" rel="stylesheet" type="text/css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
 	<script src="/tagsinput/tagsinput.js"></script>
 
@@ -33,7 +33,7 @@
 					hashtagText += $(".hashtag").get(i).textContent + ",";
 				}
 				
-				$("#btag").val(hashtagText.slice(0, -1));
+				$("#atag").val(hashtagText.slice(0, -1));
 				
 				const writeForm = $("#writeForm"); 
 				writeForm.attr("action", "/article/write");
@@ -93,7 +93,7 @@
 
 <main id="main" class="main">
 
-<div class="container">
+<div class="container" style="margin: 50px auto;">
 	<div style="width:862px; margin:0 auto;">
 		<div class="clearfix">
 			<div class="float-start fw-bold fs-3" style="line-height:40px;">카페 글쓰기</div>
@@ -101,24 +101,24 @@
 		</div>
 		<hr>
 		<form id="writeForm" name="writeForm">
-			<input type="hidden" name="bwriter" value="${member.mid}">
-			<input type="hidden" name="binsertid" value="${member.mid}">
-			<input type="hidden" id="btag" name="btag">
+			<input type="hidden" name="awriter" value="${member.mid}">
+			<input type="hidden" name="ainsertid" value="${member.mid}">
+			<input type="hidden" id="atag" name="atag">
 			<div class="row mb-2">
-				<select class="form-select me-2" name="bcategoryno" style="width:630px; margin-left:12px;">
+				<select class="form-select me-2" name="acategoryno" style="width:630px; margin-left:12px;">
 					<option value="1" selected>1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 				</select>
-				<select class="form-select" name="bcategorynoref" style="width:224px;">
+				<select class="form-select" name="acategorynoref" style="width:224px;">
 					<option value="1" selected>1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 				</select>
 			</div>
-			<input type="text" class="form-control" name="btitle" id="btitle" placeholder="제목을 입력해 주세요.">
+			<input type="text" class="form-control" name="atitle" id="atitle" placeholder="제목을 입력해 주세요.">
 			<div class="mt-2">
-				<textarea id="summernote" name="bcontent"></textarea>
+				<textarea id="summernote" name="acontent"></textarea>
 				<div>
 					<input type="text" data-role="tagsinput" value="">
 				</div>

@@ -6,6 +6,90 @@
 <head>
 <meta charset="UTF-8">
 <title>articleView</title>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#topBtn").on("click", function() {
+			$("html, body").animate({ scrollTop:0 }, 100);
+			return false;
+		});
+		
+		$("#heartWrapper").on("click", function() {
+			const heartIconTag = $("#heartIcon");
+			const heartClass = heartIconTag.attr("class");
+			const heartCountTag = $("#heartCount");
+			//let heartCount = heartCountTag.text();
+			const ano = $("#ano").val();
+			const mid = $("#mid").val();
+			
+			// 좋아요 갯수 불러오기
+			$.ajax({
+				url: "/article/like",
+				data: {
+					ano:ano
+				},
+				method:"GET"
+			})
+			.done(function(result) {
+				heartCountTag.text(result);
+			})
+			.fail(function() {
+				alert("좋아요 갯수 불러오기를 실패하였습니다.");
+			})
+			
+			// 로그인 여부 파악하기
+			if(!mid) {
+				let result = confirm("이 기능은 로그인 멤버만 사용할 수 있습니다.\n로그인하시겠습니까?");
+				if(result) {
+					location.href="/member/login";	
+				}
+				
+				return;
+			}
+			
+			// 빈 하트 상태
+			if(heartClass === "far fa-heart") {
+				$.ajax({
+					url: "/article/addLike",
+					data: {
+						ano:ano,
+						mid:mid
+					},
+					method:"POST"
+				})
+				.done(function(result) {
+					heartIconTag.attr("class", "fas fa-heart");
+					heartCount++;
+					heartCountTag.text(heartCount);
+				})
+				.fail(function() {
+					alert("좋아요 기능에 문제가 발생하였습니다.");
+				});
+			} 
+			
+			// 들어있는 하트 상태
+			if(heartClass === "fas fa-heart") {
+				$.ajax({
+					url: "/article/removeLike",
+					data: {
+						ano:ano,
+						mid:mid
+					},
+					method:"POST"
+				})
+				.done(function(result) {
+					heartIconTag.attr("class", "far fa-heart");
+					heartCount--;
+					heartCountTag.text(heartCount);
+				})
+				.fail(function() {
+					alert("좋아요 기능에 문제가 발생하였습니다.");
+				});
+			}
+		});
+	});
+</script>
 
 <style>
 	table .ellipsis {
@@ -36,6 +120,11 @@
 		box-shadow: none;
 		outline: none;
 	}
+	.report-span:before {
+		content: "｜";
+	    margin: 0px 5px;
+	    color: silver;
+	}
 </style>
 
 </head>
@@ -45,30 +134,32 @@
 <c:import url="/sidebar"></c:import>
 
  <main id="main" class="main">
-
+	<input type="hidden" id="ano" value="${article.ano}">
+	<input type="hidden" id="mid" value="${member.mid}">
+	
     <div class="container pagetitle clearfix" style="width:860px; margin:0 auto;">
       <div class="float-end">
-		<div class="btn btn-primary">이전글</div>
-		<div class="btn btn-primary">이전글</div>
-		<div class="btn btn-primary">이전글</div>
+		<div class="btn btn-sm fw-bold" style="background:#e6e6e6;"><i class="fas fa-chevron-up"></i> &nbsp; 이전글</div>
+		<div class="btn btn-sm fw-bold" style="background:#e6e6e6;"><i class="fas fa-chevron-down"></i> &nbsp; 다음글</div>
+		<div class="btn btn-sm fw-bold" style="background:#e6e6e6;">목록</div>
 	  </div>
     </div><!-- End Page Title -->
 	
 	<div class="container" style="width:860px; margin:0 auto;">
 		<div class="mt-3 p-4" style="border:1px solid gray; border-radius:5px;">
-			<div>자유게시판</div>
+			<div class="ms-1" style="color:#03c75a; font-size:13px;">${article.acategoryno} <i class="fas fa-chevron-right"></i></div>
 			<div>
-				<span>[내가 싼 똥]</span>
-				<span>Wakgood oppa brought me here! 💚</span>
+				<span class="fw-bold fs-4">[${article.acategorynoref}] </span>
+				<span class="fw-bold fs-4">${article.atitle}</span>
 			</div>
 			<div class="clearfix">
 				<div class="float-start d-flex align-items-start mt-2"> 
 					<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="profile-image" style="width:36px; height:36px;">
 					<div class="w-100 ms-3">
 						<div style="font-size:14px;">
-							<span class="me-1 fw-bold">구리구리12</span>
+							<span class="me-1 fw-bold">${article.awriter}</span>
 							<span>침팬치</span>
-							<div class="badge badge-sm" style="background:gray;">1:1 채팅</div>
+							<div class="badge badge-sm" style="background:#d4d4d4; color:#000; border-radius:5px;">1:1 채팅</div>
 						</div>
 						<div class="text-muted mt-1" style="font-size:12px;">
 							<span class="me-1">2022.01.29. 17:04</span> 
@@ -78,23 +169,27 @@
 				</div>
 				<div class="float-end" style="line-height:55px;">
 					<span>
-						<span>댓글 17</span>
-						<span>URL 복사</span>
-						<span>:</span>
+						<span class="me-2" style="font-size:13px;">
+							<i class="far fa-comment-dots"></i>&nbsp;
+							<span>댓글</span> 
+							<span class="fw-bold">17</span>
+						</span>
+						<span class="me-2" style="font-size:13px;">URL 복사</span>
+						<span><i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i></span>
 					</span>
 				</div>
 			</div>
 			<hr>
 
 			<div>
-				글내용
+				${article.acontent}
 			</div>
 
 			<div class="d-flex align-items-start mt-4"> 
 				<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="profile-image" style="width:36px; height:36px;">
 				<div class="w-100 ms-3">
-					<div style="font-size:14px; line-height:40px;">
-						<span class="fw-bold">구리구리12</span>
+					<div style="font-size:12px; line-height:40px;">
+						<span class="fw-bold" style="font-size:16px;">${article.awriter}</span>
 						<span>님의 게시글 더보기 ></span>
 					</div>
 				</div>
@@ -102,12 +197,28 @@
 
 			<div class="clearfix mt-3">
 				<div class="float-start">
-					<span>좋아요 0</span>
-					<span>댓글 17</span>
+					<span id="heartWrapper" class="me-3">
+						<i id="heartIcon" class="far fa-heart" style="color:red;"></i>
+						<!-- <i class="fas fa-heart"></i> -->
+						<span style="font-size:12px;">좋아요</span> 
+						<span id="heartCount" style="font-size:14px; font-weight:bold;">0</span>
+					</span>
+					<span>
+						<i class="far fa-comment-dots position-relative">
+						  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+						    <span class="visually-hidden">New alerts</span>
+						  </span>
+						</i>
+						<span style="font-size:12px;">댓글</span> 
+						<span style="font-size:14px; font-weight:bold;">17</span>
+					</span>
 				</div>
 				<div class="float-end">
-					<span>공유</span>
-					<span>신고</span>
+					<span>
+						<i class="far fa-share-square"></i>
+						<span style="font-size:13px;">공유</span>
+					</span>
+					<span class="report-span" style="font-size:13px;">신고</span>
 				</div>
 			</div>
 
@@ -117,7 +228,7 @@
 			<div class="fw-bold fs-5">댓글</div>
 
 			<div class="mt-3 p-3" style="border:1px solid gray; border-radius:5px; background:white;">
-				<div>qkrtkdgur</div>
+				<div>${member.mid}</div>
 				<div class="mt-2">
 					<textarea class="comment_inbox_text" placeholder="댓글을 남겨보세요" rows="2" style="width:100%; overflow:hidden; overflow-wrap: break-word; height:36px;"></textarea>
 				</div>
@@ -151,7 +262,7 @@
 						  height="36"
 						/>
 					  </a>
-					  <div class="flex-grow-1 flex-shrink-1" style="margin-bottom:-7px;">
+					  <div style="margin-bottom:-7px; width:100%;">
 						<div>
 						  <div class="d-flex justify-content-between align-items-center">
 							<p class="mb-1 fw-bold" style="font-size:14px;">
@@ -166,6 +277,9 @@
 							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
 						  </p>
 						</div>
+					  </div>
+					  <div class="flex-grow-1 flex-shrink-1">
+					  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
 					  </div>
 					</div>
 				</div>
@@ -183,7 +297,7 @@
 						  height="36"
 						/>
 					  </a>
-					  <div class="flex-grow-1 flex-shrink-1" style="margin-bottom:-7px;">
+					  <div style="margin-bottom:-7px; width:100%;">
 						<div>
 						  <div class="d-flex justify-content-between align-items-center">
 							<p class="mb-1 fw-bold" style="font-size:14px;">
@@ -198,6 +312,9 @@
 							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
 						  </p>
 						</div>
+					  </div>
+					  <div class="flex-grow-1 flex-shrink-1">
+					  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
 					  </div>
 					</div>
 				</div>
@@ -215,7 +332,7 @@
 						  height="36"
 						/>
 					  </a>
-					  <div class="flex-grow-1 flex-shrink-1" style="margin-bottom:-7px;">
+					  <div style="margin-bottom:-7px; width:100%;">
 						<div>
 						  <div class="d-flex justify-content-between align-items-center">
 							<p class="mb-1 fw-bold" style="font-size:14px;">
@@ -230,6 +347,9 @@
 							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
 						  </p>
 						</div>
+					  </div>
+					  <div class="flex-grow-1 flex-shrink-1">
+					  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
 					  </div>
 					</div>
 				</div>
@@ -262,14 +382,17 @@
 		<!-- /카드 -->
 	</div>
 
-	<div class="clearfix mt-3">
+	<div class="clearfix mt-2">
 		<div class="float-start">
-			<div class="btn btn-success">글쓰기</div>
-			<div class="btn btn-success">답글</div>
+			<a href="/article/write" class="btn btn-success btn-sm">
+				<i class="fas fa-pen"></i>
+				<span>글쓰기</span>
+			</a>
+			<div class="btn btn-sm fw-bold" style="background:#e6e6e6;">답글</div>
 		</div>
 		<div class="float-end">
-			<div class="btn btn-success">목록</div>
-			<div class="btn btn-success">TOP</div>			
+			<div class="btn btn-sm fw-bold" style="background:#e6e6e6;">목록</div>
+			<div id="topBtn" class="btn btn-sm fw-bold" style="background:#e6e6e6;"><i class="fas fa-caret-up"></i> &nbsp; TOP</div>			
 		</div>
 	</div>
 

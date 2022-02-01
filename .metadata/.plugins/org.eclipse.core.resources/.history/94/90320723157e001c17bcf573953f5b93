@@ -1,5 +1,0 @@
-package com.hatsnake.ever.member.dao;
-
-public class MemberDAOImpl implements MemberDAO {
-
-}

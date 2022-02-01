@@ -1,0 +1,53 @@
+package com.hatsnake.ever.article.vo;
+
+import java.util.Date;
+
+public class ArticleVO {
+
+	private int ano;
+	private String atitle;
+	private String acontent;
+	private String awriter;
+	private int aviewcnt;
+	private int acategoryno;
+	private int acategorynoref;
+	private Date ainsertdate;
+	private String ainsertip;
+	private String ainsertid;
+	private Date aupdatedate;
+	private String aupdateip;
+	private String aupdateid;
+	private String adeleteyn;
+	private String adeleteip;
+	private String adeleteid;
+	
+	public ArticleVO() {
+		
+	}
+
+	public ArticleVO(int ano, String atitle, String acontent, String awriter, 
+					 int aviewcnt, int acategoryno, int acategorynoref, Date ainsertdate, 
+					 String ainsertip, String ainsertid, Date aupdatedate, String aupdateip, 
+					 String aupdateid, String adeleteyn, String adeleteip, String adeleteid) {
+		super();
+		this.ano = ano;
+		this.atitle = atitle;
+		this.acontent = acontent;
+		this.awriter = awriter;
+		this.aviewcnt = aviewcnt;
+		this.acategoryno = acategoryno;
+		this.acategorynoref = acategorynoref;
+		this.ainsertdate = ainsertdate;
+		this.ainsertip = ainsertip;
+		this.ainsertid = ainsertid;
+		this.aupdatedate = aupdatedate;
+		this.aupdateip = aupdateip;
+		this.aupdateid = aupdateid;
+		this.adeleteyn = adeleteyn;
+		this.adeleteip = adeleteip;
+		this.adeleteid = adeleteid;
+	}
+	
+
+	
+}

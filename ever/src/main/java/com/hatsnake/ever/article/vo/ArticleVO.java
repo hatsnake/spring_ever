@@ -4,186 +4,185 @@ import java.util.Date;
 
 public class ArticleVO {
 
-	private int number;
-	private String btitle;
-	private String bcontent;
-	private String bwriter;
-	private int bviewcnt;
-	private int bcategoryno;
-	private int bcategorynoref;
-	private Date binsertdate;
-	private String binsertip;
-	private String binsertid;
-	private Date bupdatedate;
-	private String bupdateip;
-	private String bupdateid;
-	private String bdeleteyn;
-	private String bdeleteip;
-	private String bdeleteid;
+	private int ano;
+	private String atitle;
+	private String acontent;
+	private String awriter;
+	private int aviewcnt;
+	private int acategoryno;
+	private int acategorynoref;
+	private Date ainsertdate;
+	private String ainsertip;
+	private String ainsertid;
+	private Date aupdatedate;
+	private String aupdateip;
+	private String aupdateid;
+	private String adeleteyn;
+	private String adeleteip;
+	private String adeleteid;
 	
 	public ArticleVO() {
 		
 	}
-	
-	public ArticleVO(int number, String btitle, String bcontent, 
-					 String bwriter, int bviewcnt, int bcategoryno,
-					 int bcategorynoref, Date binsertdate, String binsertip, 
-					 String binsertid, Date bupdatedate, String bupdateip, 
-					 String bupdateid, String bdeleteyn, String bdeleteip, 
-					 String bdeleteid) {
-		this.number = number;
-		this.btitle = btitle;
-		this.bcontent = bcontent;
-		this.bwriter = bwriter;
-		this.bviewcnt = bviewcnt;
-		this.bcategoryno = bcategoryno;
-		this.bcategorynoref = bcategorynoref;
-		this.binsertdate = binsertdate;
-		this.binsertip = binsertip;
-		this.binsertid = binsertid;
-		this.bupdatedate = bupdatedate;
-		this.bupdateip = bupdateip;
-		this.bupdateid = bupdateid;
-		this.bdeleteyn = bdeleteyn;
-		this.bdeleteip = bdeleteip;
-		this.bdeleteid = bdeleteid;
+
+	public ArticleVO(int ano, String atitle, String acontent, String awriter, 
+					 int aviewcnt, int acategoryno, int acategorynoref, Date ainsertdate, 
+					 String ainsertip, String ainsertid, Date aupdatedate, String aupdateip, 
+					 String aupdateid, String adeleteyn, String adeleteip, String adeleteid) {
+		super();
+		this.ano = ano;
+		this.atitle = atitle;
+		this.acontent = acontent;
+		this.awriter = awriter;
+		this.aviewcnt = aviewcnt;
+		this.acategoryno = acategoryno;
+		this.acategorynoref = acategorynoref;
+		this.ainsertdate = ainsertdate;
+		this.ainsertip = ainsertip;
+		this.ainsertid = ainsertid;
+		this.aupdatedate = aupdatedate;
+		this.aupdateip = aupdateip;
+		this.aupdateid = aupdateid;
+		this.adeleteyn = adeleteyn;
+		this.adeleteip = adeleteip;
+		this.adeleteid = adeleteid;
 	}
 
-	public int getNumber() {
-		return number;
+	public int getAno() {
+		return ano;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 
-	public String getBtitle() {
-		return btitle;
+	public String getAtitle() {
+		return atitle;
 	}
 
-	public void setBtitle(String btitle) {
-		this.btitle = btitle;
+	public void setAtitle(String atitle) {
+		this.atitle = atitle;
 	}
 
-	public String getBcontent() {
-		return bcontent;
+	public String getAcontent() {
+		return acontent;
 	}
 
-	public void setBcontent(String bcontent) {
-		this.bcontent = bcontent;
+	public void setAcontent(String acontent) {
+		this.acontent = acontent;
 	}
 
-	public String getBwriter() {
-		return bwriter;
+	public String getAwriter() {
+		return awriter;
 	}
 
-	public void setBwriter(String bwriter) {
-		this.bwriter = bwriter;
+	public void setAwriter(String awriter) {
+		this.awriter = awriter;
 	}
 
-	public int getBviewcnt() {
-		return bviewcnt;
+	public int getAviewcnt() {
+		return aviewcnt;
 	}
 
-	public void setBviewcnt(int bviewcnt) {
-		this.bviewcnt = bviewcnt;
+	public void setAviewcnt(int aviewcnt) {
+		this.aviewcnt = aviewcnt;
 	}
 
-	public int getBcategoryno() {
-		return bcategoryno;
+	public int getAcategoryno() {
+		return acategoryno;
 	}
 
-	public void setBcategoryno(int bcategoryno) {
-		this.bcategoryno = bcategoryno;
+	public void setAcategoryno(int acategoryno) {
+		this.acategoryno = acategoryno;
 	}
 
-	public int getBcategorynoref() {
-		return bcategorynoref;
+	public int getAcategorynoref() {
+		return acategorynoref;
 	}
 
-	public void setBcategorynoref(int bcategorynoref) {
-		this.bcategorynoref = bcategorynoref;
+	public void setAcategorynoref(int acategorynoref) {
+		this.acategorynoref = acategorynoref;
 	}
 
-	public Date getBinsertdate() {
-		return binsertdate;
+	public Date getAinsertdate() {
+		return ainsertdate;
 	}
 
-	public void setBinsertdate(Date binsertdate) {
-		this.binsertdate = binsertdate;
+	public void setAinsertdate(Date ainsertdate) {
+		this.ainsertdate = ainsertdate;
 	}
 
-	public String getBinsertip() {
-		return binsertip;
+	public String getAinsertip() {
+		return ainsertip;
 	}
 
-	public void setBinsertip(String binsertip) {
-		this.binsertip = binsertip;
+	public void setAinsertip(String ainsertip) {
+		this.ainsertip = ainsertip;
 	}
 
-	public String getBinsertid() {
-		return binsertid;
+	public String getAinsertid() {
+		return ainsertid;
 	}
 
-	public void setBinsertid(String binsertid) {
-		this.binsertid = binsertid;
+	public void setAinsertid(String ainsertid) {
+		this.ainsertid = ainsertid;
 	}
 
-	public Date getBupdatedate() {
-		return bupdatedate;
+	public Date getAupdatedate() {
+		return aupdatedate;
 	}
 
-	public void setBupdatedate(Date bupdatedate) {
-		this.bupdatedate = bupdatedate;
+	public void setAupdatedate(Date aupdatedate) {
+		this.aupdatedate = aupdatedate;
 	}
 
-	public String getBupdateip() {
-		return bupdateip;
+	public String getAupdateip() {
+		return aupdateip;
 	}
 
-	public void setBupdateip(String bupdateip) {
-		this.bupdateip = bupdateip;
+	public void setAupdateip(String aupdateip) {
+		this.aupdateip = aupdateip;
 	}
 
-	public String getBupdateid() {
-		return bupdateid;
+	public String getAupdateid() {
+		return aupdateid;
 	}
 
-	public void setBupdateid(String bupdateid) {
-		this.bupdateid = bupdateid;
+	public void setAupdateid(String aupdateid) {
+		this.aupdateid = aupdateid;
 	}
 
-	public String getBdeleteyn() {
-		return bdeleteyn;
+	public String getAdeleteyn() {
+		return adeleteyn;
 	}
 
-	public void setBdeleteyn(String bdeleteyn) {
-		this.bdeleteyn = bdeleteyn;
+	public void setAdeleteyn(String adeleteyn) {
+		this.adeleteyn = adeleteyn;
 	}
 
-	public String getBdeleteip() {
-		return bdeleteip;
+	public String getAdeleteip() {
+		return adeleteip;
 	}
 
-	public void setBdeleteip(String bdeleteip) {
-		this.bdeleteip = bdeleteip;
+	public void setAdeleteip(String adeleteip) {
+		this.adeleteip = adeleteip;
 	}
 
-	public String getBdeleteid() {
-		return bdeleteid;
+	public String getAdeleteid() {
+		return adeleteid;
 	}
 
-	public void setBdeleteid(String bdeleteid) {
-		this.bdeleteid = bdeleteid;
+	public void setAdeleteid(String adeleteid) {
+		this.adeleteid = adeleteid;
 	}
 
 	@Override
 	public String toString() {
-		return "ArticleVO [number=" + number + ", btitle=" + btitle + ", bcontent=" + bcontent + ", bwriter=" + bwriter
-				+ ", bviewcnt=" + bviewcnt + ", bcategoryno=" + bcategoryno + ", bcategorynoref=" + bcategorynoref
-				+ ", binsertdate=" + binsertdate + ", binsertip=" + binsertip + ", binsertid=" + binsertid
-				+ ", bupdatedate=" + bupdatedate + ", bupdateip=" + bupdateip + ", bupdateid=" + bupdateid
-				+ ", bdeleteyn=" + bdeleteyn + ", bdeleteip=" + bdeleteip + ", bdeleteid=" + bdeleteid + "]";
+		return "ArticleVO [ano=" + ano + ", atitle=" + atitle + ", acontent=" + acontent + ", awriter=" + awriter
+				+ ", aviewcnt=" + aviewcnt + ", acategoryno=" + acategoryno + ", acategorynoref=" + acategorynoref
+				+ ", ainsertdate=" + ainsertdate + ", ainsertip=" + ainsertip + ", ainsertid=" + ainsertid
+				+ ", aupdatedate=" + aupdatedate + ", aupdateip=" + aupdateip + ", aupdateid=" + aupdateid
+				+ ", adeleteyn=" + adeleteyn + ", adeleteip=" + adeleteip + ", adeleteid=" + adeleteid + "]";
 	}
 	
 }
