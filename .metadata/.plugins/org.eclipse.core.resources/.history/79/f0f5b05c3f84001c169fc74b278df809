@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="articleMapper">
+
+	<insert id="articleWrite" parameterType="articleVO" useGeneratedKeys="true" keyColumn="ano" keyProperty="ano">
+		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
+			SELECT E_ARTICLE_SEQ.NEXTVAL AS ano FROM DUAL
+		</selectKey>
+		
+		INSERT INTO E_ARTICLE ( 
+			ANO,
+		    ATITLE,
+			ACONTENT,
+			AWRITER,
+			ACATEGORYNO,
+			ACATEGORYNOREF,
+			AINSERTDATE,
+			AINSERTIP,
+			AINSERTID
+		) VALUES (
+			#{ano},
+			#{atitle},
+			#{acontent},
+			#{awriter},
+			#{acategoryno},
+			#{acategorynoref},
+			SYSDATE,
+			#{ainsertip},
+			#{ainsertid}
+		)
+	</insert>
+	
+	<!--  
+	<select id="articleList" resultType="articleVO">
+		SELECT * FROM E_ARTICLE
+		ORDER BY ANO DESC
+	</select>
+	-->
+
+	<select id="articleList" resultType="articleVO" parameterType="criteria">
+		SELECT 
+		    ANO,
+		    ACATEGORYNO,
+		    ACATEGORYNOREF,
+		    ATITLE,
+		    ACONTENT,
+		    AWRITER,
+		    AINSERTDATE,
+		    AVIEWCNT
+		FROM (
+		    SELECT 
+		        ANO,
+		        ACATEGORYNO,
+		        ACATEGORYNOREF,
+		        ATITLE,
+		        ACONTENT,
+		        AWRITER,
+		        AINSERTDATE,
+		        AVIEWCNT,
+		        ROW_NUMBER() OVER(ORDER BY ANO DESC) AS RNUM
+		    FROM E_ARTICLE
+		) E
+		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY ANO DESC
+	</select>
+	
+	<select id="articleListCount" resultType="int">
+		<![CDATA[
+			SELECT COUNT(ANO) E_ARTICLE
+			WHERE ANO > 0
+		]]>
+	</select>
+	
+	<select id="articleView" resultType="articleVO">
+		SELECT * FROM E_ARTICLE
+		WHERE ANO = #{ano}
+	</select>
+
+	<select id="getLike" resultType="int">
+		SELECT COUNT(LNO) FROM E_ARTICLE_LIKE
+		WHERE ANO = #{ano}
+	</select>
+	
+	<select id="checkLike" resultType="int">
+		SELECT COUNT(LNO) FROM E_ARTICLE_LIKE
+		WHERE ANO = #{ano}
+		AND   MID = #{mid}
+	</select>
+	
+	<insert id="addLike">
+		INSERT INTO E_ARTICLE_LIKE (
+			LNO,
+			ANO,
+			MID
+		) VALUES (
+			E_ARTICLE_LIKE_SEQ.NEXTVAL,
+			#{ano},
+			#{mid}
+		)
+	</insert>
+	
+	<delete id="removeLike">
+		DELETE FROM E_ARTICLE_LIKE 
+		WHERE MID = #{mid}
+	</delete>
+	
+	<update id="viewCountUp">
+		UPDATE E_ARTICLE SET 
+		AVIEWCNT = (AVIEWCNT + 1)
+		WHERE ANO = #{ano}
+	</update>
+
+</mapper>

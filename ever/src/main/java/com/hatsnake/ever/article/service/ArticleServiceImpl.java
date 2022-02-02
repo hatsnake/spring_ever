@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hatsnake.ever.article.dao.ArticleDAO;
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
+import com.hatsnake.ever.article.vo.Criteria;
 
 @Service
 @Transactional
@@ -30,6 +31,20 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public List<ArticleVO> articleList(Criteria cri) throws Exception {
+		logger.info("ArticleServiceImpl.articleList() 함수 시작");
+		
+		return articleDao.articleList(cri);
+	}
+	
+	@Override
+	public int articleListCount() throws Exception {
+		logger.info("ArticleServiceImpl.articleListCount() 함수 시작");
+		
+		return articleDao.articleListCount();
+	}
+
+	@Override
 	public List<ArticleVO> articleView(ArticleVO article) throws Exception {
 		logger.info("ArticleServiceImpl.articleView() 함수 시작");
 		
@@ -37,10 +52,38 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public int getArticleLike(ArticleLikeVO articleLike) throws Exception {
-		logger.info("ArticleServiceImpl.getArticleLike() 함수 시작");
+	public int getLike(ArticleLikeVO articleLike) throws Exception {
+		logger.info("ArticleServiceImpl.getLike() 함수 시작");
 		
-		return articleDao.getArticleLike(articleLike);
+		return articleDao.getLike(articleLike);
+	}
+
+	@Override
+	public int checkLike(ArticleLikeVO articleLike) throws Exception {
+		logger.info("ArticleServiceImpl.checkLike() 함수 시작");
+		
+		return articleDao.checkLike(articleLike);
+	}
+
+	@Override
+	public int addLike(ArticleLikeVO articleLike) throws Exception {
+		logger.info("ArticleServiceImpl.addLike() 함수 시작");
+		
+		return articleDao.addLike(articleLike);
+	}
+
+	@Override
+	public int removeLike(ArticleLikeVO articleLike) throws Exception {
+		logger.info("ArticleServiceImpl.removeLike() 함수 시작");
+		
+		return articleDao.removeLike(articleLike);
+	}
+
+	@Override
+	public void viewCountUp(ArticleVO article) throws Exception {
+		logger.info("ArticleServiceImpl.viewCountUp() 함수 시작");
+		
+		articleDao.viewCountUp(article);
 	}
 
 }

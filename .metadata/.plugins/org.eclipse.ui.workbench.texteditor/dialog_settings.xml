@@ -6,8 +6,10 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="text-dark"/>
+		<item key="selection" value="heartCount"/>
 		<list key="findhistory">
+			<item value="heartCount"/>
+			<item value="java.lang.IllegalStateException: Optional int parameter &apos;ano&apos; is present but cannot be translated into a null value due to being declared as a primitive type. Consider declaring it as object wrapper for the corresponding primitive type."/>
 			<item value="text-dark"/>
 			<item value="add"/>
 			<item value="push"/>

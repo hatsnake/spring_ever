@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,9 +22,22 @@
 		right: 9px;
 	}
 	
+	.table .ellipsis a {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	
 	.ellipsis:before {
 		content: '';
 		display: inline-block;
+	}
+	#atitle {
+		color: black;
+	}
+	
+	#atitle:hover {
+		text-decoration:underline;		
 	}
 </style>
 <script>
@@ -48,7 +62,7 @@
 	<div class="container" style="width:860px; margin:0 auto;">
 		<table class="table table-sm bg-white" style="border-collapse:inherit;">
 		  <div>
-			  <span style="float:left; margin-top:7px;">3,000,000개의 글</span>
+			  <span style="float:left; margin-top:7px;">${pageMaker.totalCount}개의 글</span>
 			  <span style="float:right; margin-bottom:2px;">
 				<select class="form-select form-select-sm" aria-label="Default select example">
 				  <option selected>5개씩</option>
@@ -63,52 +77,70 @@
 		  <thead>
 			<tr>
 			  <th class="col-1"></th>
-			  <th class="col-7 text-center">제목</th>
+			  <th class="col-6 text-center">제목</th>
 			  <th class="col-2">작성자</th>
-			  <th scope="col">작성일</th>
-			  <th class="col-1">조회</th>
+			  <th class="col-2 text-center">작성일</th>
+			  <th class="col-1 text-center">조회</th>
 			</tr>
 		  </thead>
 		  <tbody>
-			<tr>
-			  <td class="ellipsis" style="vertical-align: middle;"><span><div class="badge badge-sm badge-success" style="background:red;">공지</div></span></th>
-			  <td class="text-left ellipsis"><span class="">[내가 싼 똥] 핸님들은 뭔가 애착인형같은거 있나여ggggggggggggggggggggggggg</span></td>
-			  <td class="ellipsis"><span>김단향</span></td>
-			  <td class="ellipsis"><span>2019.09.30.</span></td>
-			  <td class="ellipsis"><span>2.2만</span></td>
-			</tr>
-			<tr>
-			  <td class="ellipsis" style="font-size:12px; vertical-align: middle;"><span>유저게시판</span></th>
-			  <td class="text-left ellipsis"><span class="">[내가 싼 똥] 핸님들은 뭔가 애착인형같은거 있나여ggggggggggggggggggggggggg</span></td>
-			  <td class="ellipsis"><span>김단향</span></td>
-			  <td class="ellipsis"><span>2019.09.30.</span></td>
-			  <td class="ellipsis"><span>2.2만</span></td>
-			</tr>
-			<tr>
-			  <td class="ellipsis"><span><div class="badge badge-sm badge-success" style="background:red;">공지</div></span></th>
-			  <td class="text-left ellipsis"><span class="">[내가 싼 똥] 핸님들은 뭔가 애착인형같은거 있나여ggggggggggggggggggggggggg</span></td>
-			  <td class="ellipsis"><span>김단향</span></td>
-			  <td class="ellipsis"><span>2019.09.30.</span></td>
-			  <td class="ellipsis"><span>2.2만</span></td>
-			</tr>
+		  	<c:forEach items="${articleList}" var="article">		  	
+				<tr>
+				  <td class="text-truncate" style="vertical-align: middle;">
+				  	<span>
+				  		<%-- 
+				  		<div class="badge badge-sm badge-success" style="background:red;">
+				  			${article.acategoryno}
+				  		</div>
+				  		--%>
+				  		${article.acategoryno}
+				  	</span>
+				  </th>
+				  <td class="text-left text-truncate">
+				  	<a id="atitle" href="/article/view/${article.ano}">
+				  		<span style="color:#959595;">[${article.acategorynoref}]</span>
+				  		<span>${article.atitle}</span>
+				  	</a>
+				  </td>
+				  <td class="text-truncate">
+				  	<span>${article.awriter}</span>
+				  </td>
+				  <td class="text-center text-truncate">
+				  	<span>
+				  		<fmt:formatDate value="${article.ainsertdate}" pattern="yyyy.MM.dd."></fmt:formatDate>
+				  	</span>
+				  </td>
+				  <td class="text-center text-truncate">
+				  	<span>${article.aviewcnt}</span>
+				  </td>
+				</tr>
+		  	</c:forEach>
 		  </tbody>
 		</table>
 
 		<nav aria-label="Page navigation example ">
 		  <ul class="pagination pagination-sm justify-content-center">
-			<li class="page-item ms-1 me-1">
-			  <a class="page-link" href="#" aria-label="Previous">
-				<span aria-hidden="true">&laquo; 이전</span>
-			  </a>
-			</li>
-			<li class="page-item ms-1 me-1"><a class="page-link" href="#">1</a></li>
-			<li class="page-item ms-1 me-1"><a class="page-link" href="#">2</a></li>
-			<li class="page-item ms-1 me-1"><a class="page-link" href="#">3</a></li>
-			<li class="page-item ms-1 me-1">
-			  <a class="page-link" href="#" aria-label="Next">
-				<span aria-hidden="true">다음 &raquo;</span>
-			  </a>
-			</li>
+		  	<c:if test="${pageMaker.prev}">
+				<li class="page-item ms-1 me-1">
+				  <a class="page-link" href="list${pageMaker.makeQuery(pageMaker.startPage - 1)}" aria-label="Previous">
+					<span aria-hidden="true">&laquo; 이전</span>
+				  </a>
+				</li>
+			</c:if>
+			
+			<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">			
+				<li class="page-item ms-1 me-1">
+					<a class="page-link" href="list${pageMaker.makeQuery(idx)}">${idx}</a>
+				</li>
+			</c:forEach>
+			
+			<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+				<li class="page-item ms-1 me-1">
+				  <a class="page-link" href="list${pageMaker.makeQuery(pageMaker.endPage + 1)}" aria-label="Next">
+					<span aria-hidden="true">다음 &raquo;</span>
+				  </a>
+				</li>
+			</c:if>
 		  </ul>
 		</nav>
 

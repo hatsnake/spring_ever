@@ -54,6 +54,17 @@ public class MemberController {
 		}
 		
 	}
+	
+	// 로그아웃
+	@GetMapping("/member/logout")
+	public String logout(HttpServletRequest req) throws Exception {
+		logger.info("MemberController.logout() 함수 시작");
+		
+		HttpSession session = req.getSession();
+		session.invalidate();
+		
+		return "redirect:/";
+	}
 
 	// 회원가입
 	@GetMapping("/member/register")

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,34 +11,27 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 <script type="text/javascript">
+
+
 	$(document).ready(function() {
+		
+		const ano = $("#ano").val();
+		const mid = $("#mid").val();
+		
+		checkLike(ano, mid);
+		getLike(ano, mid);
+		
 		$("#topBtn").on("click", function() {
 			$("html, body").animate({ scrollTop:0 }, 100);
 			return false;
 		});
 		
 		$("#heartWrapper").on("click", function() {
-			const heartIconTag = $("#heartIcon");
-			const heartClass = heartIconTag.attr("class");
-			const heartCountTag = $("#heartCount");
-			//let heartCount = heartCountTag.text();
-			const ano = $("#ano").val();
-			const mid = $("#mid").val();
 			
-			// 좋아요 갯수 불러오기
-			$.ajax({
-				url: "/article/like",
-				data: {
-					ano:ano
-				},
-				method:"GET"
-			})
-			.done(function(result) {
-				heartCountTag.text(result);
-			})
-			.fail(function() {
-				alert("좋아요 갯수 불러오기를 실패하였습니다.");
-			})
+			// 좋아요 기능 상수
+			const heartIconTag = $("#heartIcon");
+			let heartClass = heartIconTag.attr("class");
+			const heartCountTag = $("#heartCount");
 			
 			// 로그인 여부 파악하기
 			if(!mid) {
@@ -48,7 +43,7 @@
 				return;
 			}
 			
-			// 빈 하트 상태
+			// 좋아요 추가
 			if(heartClass === "far fa-heart") {
 				$.ajax({
 					url: "/article/addLike",
@@ -59,16 +54,19 @@
 					method:"POST"
 				})
 				.done(function(result) {
-					heartIconTag.attr("class", "fas fa-heart");
-					heartCount++;
-					heartCountTag.text(heartCount);
+					if(result == "true") {
+						heartIconTag.attr("class", "fas fa-heart");
+						let heartCount = heartCountTag.text();
+						heartCount = parseInt(heartCount) + 1;
+						heartCountTag.text(heartCount);
+					}
 				})
 				.fail(function() {
 					alert("좋아요 기능에 문제가 발생하였습니다.");
 				});
 			} 
 			
-			// 들어있는 하트 상태
+			// 좋아요 삭제
 			if(heartClass === "fas fa-heart") {
 				$.ajax({
 					url: "/article/removeLike",
@@ -79,9 +77,12 @@
 					method:"POST"
 				})
 				.done(function(result) {
-					heartIconTag.attr("class", "far fa-heart");
-					heartCount--;
-					heartCountTag.text(heartCount);
+					if(result == "true") {
+						heartIconTag.attr("class", "far fa-heart");
+						let heartCount = heartCountTag.text();
+						heartCount = parseInt(heartCount) - 1;
+						heartCountTag.text(heartCount);
+					}
 				})
 				.fail(function() {
 					alert("좋아요 기능에 문제가 발생하였습니다.");
@@ -89,6 +90,58 @@
 			}
 		});
 	});
+	
+	// 좋아요 갯수 불러오기
+	function getLike(ano) {
+		const heartIconTag = $("#heartIcon");
+		const heartClass = heartIconTag.attr("class");
+		const heartCountTag = $("#heartCount");
+
+		$.ajax({
+			url: "/article/getLike",
+			data: {
+				ano:ano
+			},
+			method:"GET"
+		})
+		.done(function(result) {
+			heartCountTag.text(result);
+		})
+		.fail(function() {
+			alert("좋아요 갯수 불러오기를 실패하였습니다. (getLike)");
+		})
+	}
+	
+	// 내가 좋아요 누른지 안 누른지 확인
+	function checkLike(ano, mid) {
+		const heartIconTag = $("#heartIcon");
+		const heartClass = heartIconTag.attr("class");
+		const heartCountTag = $("#heartCount");
+		
+		if(!mid) {
+			heartIconTag.attr("class", "far fa-heart");
+		} else {
+			$.ajax({
+				url: "/article/checkLike",
+				data: {
+					ano:ano,
+					mid:mid
+				},
+				method:"GET"
+			})
+			.done(function(result) {
+				if(result == "true") 
+					heartIconTag.attr("class", "fas fa-heart");
+				
+				if(result == "false") 
+					heartIconTag.attr("class", "far fa-heart");
+			})
+			.fail(function() {
+				alert("좋아요 기능에 문제가 발생하였습니다. (checkLike)");
+			});
+		}
+	}
+	
 </script>
 
 <style>
@@ -163,7 +216,10 @@
 						</div>
 						<div class="text-muted mt-1" style="font-size:12px;">
 							<span class="me-1">2022.01.29. 17:04</span> 
-							<span>조회 224</span>
+							<span>
+								<span>조회</span>
+								<span>${article.aviewcnt}</span>
+							</span>
 						</div>  
 					</div>
 				</div>
@@ -175,7 +231,9 @@
 							<span class="fw-bold">17</span>
 						</span>
 						<span class="me-2" style="font-size:13px;">URL 복사</span>
-						<span><i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i></span>
+						<span>
+							<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+						</span>
 					</span>
 				</div>
 			</div>
@@ -343,7 +401,9 @@
 							아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 						  </p>
 						  <p>
-							<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
+							<span class="text-muted me-1" style="font-size:12px;">
+								<fmt:formatDate value="${article.ainsertdate}" pattern="yyyy.MM.dd. HH:mm"/>
+							</span>
 							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
 						  </p>
 						</div>

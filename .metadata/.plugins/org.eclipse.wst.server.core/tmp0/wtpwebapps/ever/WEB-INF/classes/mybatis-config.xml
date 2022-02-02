@@ -7,5 +7,6 @@
 	<typeAliases>
 		<typeAlias type="com.hatsnake.ever.member.vo.MemberVO" alias="memberVO"/>
 		<typeAlias type="com.hatsnake.ever.article.vo.ArticleVO" alias="articleVO"/>
+		<typeAlias type="com.hatsnake.ever.article.vo.Criteria" alias="criteria"/>
 	</typeAliases>
 </configuration>
