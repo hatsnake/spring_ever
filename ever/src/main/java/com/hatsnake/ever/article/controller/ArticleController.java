@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hatsnake.ever.article.service.ArticleService;
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
-import com.hatsnake.ever.article.vo.Criteria;
 import com.hatsnake.ever.article.vo.PageMaker;
-import com.hatsnake.ever.member.util.RemoteAddrUtils;
+import com.hatsnake.ever.article.vo.SearchCriteria;
+import com.hatsnake.ever.util.RemoteAddrUtils;
 
 @Controller
 public class ArticleController {
@@ -49,32 +49,32 @@ public class ArticleController {
 		
 		int result = articleService.articleWrite(article);
 		
-		return "redirect:/article/view/" + result; 
+		return "redirect:/article/view?ano=" + result; 
 	}
 
 	// 글 리스트
 	@GetMapping("/article/list")
-	public String list(Model model, Criteria cri) throws Exception {
+	public String list(Model model, SearchCriteria scri) throws Exception {
 		logger.info("ArticleController.list() 함수 시작");
 		
-		List<ArticleVO> articleList = articleService.articleList(cri);
+		List<ArticleVO> articleList = articleService.articleList(scri);
 		model.addAttribute("articleList", articleList);
 		
 		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(articleService.articleListCount());
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(articleService.articleListCount(scri));
 		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("scri", scri);
 		
 		return "article/articleList";
 	}
 
 	// 상세글
-	@GetMapping("/article/view/{ano}")
-	public String view(@PathVariable int ano, Model model, 
+	@GetMapping("/article/view")
+	public String view(ArticleVO article, Model model, SearchCriteria scri,
 					   HttpServletRequest req, HttpServletResponse res) throws Exception {
 		logger.info("ArticleController.view() 함수 시작");
-		ArticleVO article = new ArticleVO();
-		article.setAno(ano);
+		int ano = article.getAno();
 		
 		Cookie oldCookie = null;
 		Cookie[] cookies = req.getCookies();
@@ -108,6 +108,7 @@ public class ArticleController {
 			return "redirect:/";
 		
 		model.addAttribute("article", articleList.get(0));
+		model.addAttribute("scri", scri);
 		
 		return "article/articleView";
 	}

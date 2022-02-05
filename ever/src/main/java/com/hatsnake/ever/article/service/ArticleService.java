@@ -4,17 +4,17 @@ import java.util.List;
 
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
-import com.hatsnake.ever.article.vo.Criteria;
+import com.hatsnake.ever.article.vo.SearchCriteria;
 
 public interface ArticleService {
 	// 글 작성
 	public int articleWrite(ArticleVO article) throws Exception;
 	
 	// 글 리스트
-	public List<ArticleVO> articleList(Criteria cri) throws Exception;
+	public List<ArticleVO> articleList(SearchCriteria scri) throws Exception;
 	
 	// 글 총 갯수
-	public int articleListCount() throws Exception;
+	public int articleListCount(SearchCriteria scri) throws Exception;
 	
 	// 글 상세정보
 	public List<ArticleVO> articleView(ArticleVO article) throws Exception;

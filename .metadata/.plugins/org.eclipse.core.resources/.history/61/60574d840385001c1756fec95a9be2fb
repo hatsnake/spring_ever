@@ -1,0 +1,5 @@
+package com.hatsnake.ever.chatting.controller;
+
+public class ChatController {
+
+}

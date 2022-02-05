@@ -1,0 +1,67 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Chatting</title>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+<html>
+    <head>
+    </head>
+    <body>
+        <form>
+            <div>
+	            <form action="">
+				   	<input type="text" id="message" name="message">
+            		<input type="button" value="Send" onclick="send_message()"><br>
+				</form>
+			</div>
+			<div id="outputDiv"></div>
+		</form>
+    </body>
+</html>
+<script type="text/javascript">
+	function send_message() {
+		websocket = new WebSocket("ws://localhost/websocket/echo.");
+		websocket.onopen = function(evt) {
+	        onOpen(evt)
+	    };
+	    websocket.onmessage = function(evt) {
+	        onMessage(evt)
+	    };
+	    websocket.onerror = function(evt) {
+	        onError(evt)
+	    };
+	}
+	
+	// WebSocket 연결
+	function onOpen(evt) {
+	    writeToScreen("WebSocket 연결!");
+	    doSend($("#message").val());
+	}
+	
+	// 메시지 수신
+	function onMessage(evt) {
+	    writeToScreen("메시지 수신 : " + evt.data);
+	}
+	
+	// 에러 발생
+	function onError(evt) {
+	    writeToScreen("에러 : " + evt.data);
+	}
+	
+	function doSend(message) {
+	    writeToScreen("메시지 송신 : " + message);
+	    websocket.send(message);
+	}
+	
+	function writeToScreen(message) {
+	    $("#outputDiv").append("<p>" + message + "</p>");
+	}
+</script>
+</body>
+</html>

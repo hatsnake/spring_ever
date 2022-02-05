@@ -1,0 +1,6 @@
+package com.hatsnake.ever.article.vo;
+
+public class SearchCriteria extends Criteria {
+	private String searchType = "";
+	private String keyword = "";
+}

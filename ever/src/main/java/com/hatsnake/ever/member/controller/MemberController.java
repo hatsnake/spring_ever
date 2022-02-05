@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hatsnake.ever.member.service.MemberService;
-import com.hatsnake.ever.member.util.RemoteAddrUtils;
 import com.hatsnake.ever.member.vo.MemberVO;
+import com.hatsnake.ever.util.RemoteAddrUtils;
 
 @Controller
 public class MemberController {

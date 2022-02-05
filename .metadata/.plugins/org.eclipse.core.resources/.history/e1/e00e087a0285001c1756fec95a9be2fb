@@ -1,0 +1,8 @@
+package com.hatsnake.ever;
+
+public class Snippet {
+	public static void main(String[] args) {
+		afterConnectionClosed
+	}
+}
+

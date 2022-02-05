@@ -89,6 +89,15 @@
 				});
 			}
 		});
+		
+		// 게시글 리스트로 이동
+		$(".list_btn").on("click", function() {
+			location.href = "/article/list?page=${scri.page}" +
+						    "&perPageNum=${scri.perPageNum}" +
+						    "&searchType=${scri.searchType}" +
+						    "&searchDate=${scri.searchDate}" +
+						    "&keyword=${scri.keyword}";
+		});
 	});
 	
 	// 좋아요 갯수 불러오기
@@ -199,6 +208,14 @@
     </div><!-- End Page Title -->
 	
 	<div class="container" style="width:860px; margin:0 auto;">
+		<form name="readForm" role="form" method="post">
+			<input type="hidden" id="ano" name="ano" value="${article.ano}" />
+			<input type="hidden" id="page" name="page" value="${scri.page}" />
+			<input type="hidden" id="perPageNum" name="perPageNum" value="${scri.perPageNum}" />
+			<input type="hidden" id="searchType" name="searchType" value="${scri.searchType}" />
+			<input type="hidden" id="searchDate" name="searchType" value="${scri.searchType}" />
+			<input type="hidden" id="keyword" name="keyword" value="${scri.keyword}" />
+		</form>
 		<div class="mt-3 p-4" style="border:1px solid gray; border-radius:5px;">
 			<div class="ms-1" style="color:#03c75a; font-size:13px;">${article.acategoryno} <i class="fas fa-chevron-right"></i></div>
 			<div>
@@ -296,7 +313,7 @@
 						<span class="fs-5"><i class="far fa-smile"></i></span>
 					</div>
 					<div class="float-end">
-						<div class="btn btn-success btn-sm">등록</span>
+						<div class="btn btn-success btn-sm">등록</div>
 					</div>
 				</div>
 			</div>
@@ -451,7 +468,7 @@
 			<div class="btn btn-sm fw-bold" style="background:#e6e6e6;">답글</div>
 		</div>
 		<div class="float-end">
-			<div class="btn btn-sm fw-bold" style="background:#e6e6e6;">목록</div>
+			<div class="btn btn-sm fw-bold list_btn" style="background:#e6e6e6;">목록</div>
 			<div id="topBtn" class="btn btn-sm fw-bold" style="background:#e6e6e6;"><i class="fas fa-caret-up"></i> &nbsp; TOP</div>			
 		</div>
 	</div>

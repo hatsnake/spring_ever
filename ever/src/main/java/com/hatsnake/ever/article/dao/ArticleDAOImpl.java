@@ -5,14 +5,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
-import com.hatsnake.ever.article.vo.Criteria;
+import com.hatsnake.ever.article.vo.SearchCriteria;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -30,17 +29,17 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> articleList(Criteria cri) throws Exception {
+	public List<ArticleVO> articleList(SearchCriteria scri) throws Exception {
 		logger.info("ArticleDAOImpl.articleList() 함수 시작");
 		
-		return sqlSession.selectList("articleMapper.articleList", cri);
+		return sqlSession.selectList("articleMapper.articleList", scri);
 	}
 	
 	@Override
-	public int articleListCount() throws Exception {
+	public int articleListCount(SearchCriteria scri) throws Exception {
 		logger.info("ArticleDAOImpl.articleListCount() 함수 시작");
 		
-		return sqlSession.selectOne("articleMapper.articleListCount");
+		return sqlSession.selectOne("articleMapper.articleListCount", scri);
 	}
 	
 	@Override

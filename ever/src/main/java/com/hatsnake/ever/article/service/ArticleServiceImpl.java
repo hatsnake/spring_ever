@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hatsnake.ever.article.dao.ArticleDAO;
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
-import com.hatsnake.ever.article.vo.Criteria;
+import com.hatsnake.ever.article.vo.SearchCriteria;
 
 @Service
 @Transactional
@@ -31,17 +31,17 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleVO> articleList(Criteria cri) throws Exception {
+	public List<ArticleVO> articleList(SearchCriteria scri) throws Exception {
 		logger.info("ArticleServiceImpl.articleList() 함수 시작");
 		
-		return articleDao.articleList(cri);
+		return articleDao.articleList(scri);
 	}
 	
 	@Override
-	public int articleListCount() throws Exception {
+	public int articleListCount(SearchCriteria scri) throws Exception {
 		logger.info("ArticleServiceImpl.articleListCount() 함수 시작");
 		
-		return articleDao.articleListCount();
+		return articleDao.articleListCount(scri);
 	}
 
 	@Override

@@ -40,7 +40,7 @@
 	</select>
 	-->
 
-	<select id="articleList" resultType="articleVO" parameterType="criteria">
+	<select id="articleList" resultType="articleVO" parameterType="searchCriteria">
 		SELECT 
 		    ANO,
 		    ACATEGORYNO,
@@ -62,17 +62,52 @@
 		        AVIEWCNT,
 		        ROW_NUMBER() OVER(ORDER BY ANO DESC) AS RNUM
 		    FROM E_ARTICLE
+		    WHERE 1 = 1
+		    <include refid="search"></include>
 		) E
 		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
 		ORDER BY ANO DESC
 	</select>
 	
-	<select id="articleListCount" resultType="int">
-		<![CDATA[
-			SELECT COUNT(ANO) FROM E_ARTICLE
-			WHERE ANO > 0
-		]]>
+	<select id="articleListCount" parameterType="searchCriteria" resultType="int">
+		SELECT COUNT(ANO) FROM E_ARTICLE
+		WHERE 1 = 1
+		<include refid="search"></include>
+		AND ANO > 0
 	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">AND ATITLE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'c'.toString()">AND ACONTENT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'w'.toString()">AND AWRITER LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'tc'.toString()">AND (ATITLE LIKE '%' || #{keyword} || '%') or (ACONTENT LIKE '%' || #{keyword} || '%')</if>
+		</if>
+		
+		<if test="searchDate != null || searchDate != all">
+			<!-- all, 1d, 1w, 1m, 6m, 1y -->
+			<if test="searchDate == '1d'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(SYSDATE -1, 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>
+			<if test="searchDate == '1w'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(SYSDATE -7, 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>
+			<if test="searchDate == '1m'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>
+			<if test="searchDate == '6m'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE, -6), 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>	
+			<if test="searchDate == '1y'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>						
+		</if>
+	</sql>
 	
 	<select id="articleView" resultType="articleVO">
 		SELECT * FROM E_ARTICLE

@@ -1,0 +1,33 @@
+package com.hatsnake.ever.util;
+
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class SessionUserCounter implements HttpSessionListener {
+
+	private final Logger logger = LoggerFactory.getLogger(SessionUserCounter.class);
+	
+	// 총 접속자 수
+	public static int count;
+	
+	// 접속자 아이디
+	public static String[] 
+	
+	public static int getCount() {
+		return count;
+	}
+			
+	@Override
+	public void sessionCreated(HttpSessionEvent event) {
+		
+	}
+
+	@Override
+	public void sessionDestroyed(HttpSessionEvent event) {
+		
+	}
+
+}
