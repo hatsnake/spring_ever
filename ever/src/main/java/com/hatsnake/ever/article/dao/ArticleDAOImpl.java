@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
+import com.hatsnake.ever.article.vo.CommentVO;
 import com.hatsnake.ever.article.vo.SearchCriteria;
 
 @Repository
@@ -82,6 +83,13 @@ public class ArticleDAOImpl implements ArticleDAO {
 		logger.info("ArticleDAOImpl.viewCountUp() 함수 시작");
 		
 		sqlSession.update("articleMapper.viewCountUp", article);
+	}
+
+	@Override
+	public int writeComment(CommentVO comment) throws Exception {
+		logger.info("ArticleDAOImpl.writeComment() 함수 시작");
+		
+		return sqlSession.insert("articleMapper.writeComment", comment);
 	}
 
 }

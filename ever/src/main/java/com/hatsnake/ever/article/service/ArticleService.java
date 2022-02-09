@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
+import com.hatsnake.ever.article.vo.CommentVO;
 import com.hatsnake.ever.article.vo.SearchCriteria;
 
 public interface ArticleService {
@@ -33,5 +34,8 @@ public interface ArticleService {
 	
 	// 조회수 증가
 	public void viewCountUp(ArticleVO article) throws Exception;
+	
+	// 댓글 작성
+	public int writeComment(CommentVO comment) throws Exception;
 	
 }

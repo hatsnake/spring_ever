@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hatsnake.ever.article.dao.ArticleDAO;
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
+import com.hatsnake.ever.article.vo.CommentVO;
 import com.hatsnake.ever.article.vo.SearchCriteria;
 
 @Service
@@ -84,6 +85,13 @@ public class ArticleServiceImpl implements ArticleService {
 		logger.info("ArticleServiceImpl.viewCountUp() 함수 시작");
 		
 		articleDao.viewCountUp(article);
+	}
+
+	@Override
+	public int writeComment(CommentVO comment) throws Exception {
+		logger.info("ArticleServiceImpl.writeComment() 함수 시작");
+		
+		return articleDao.writeComment(comment);
 	}
 
 }

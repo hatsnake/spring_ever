@@ -148,4 +148,22 @@
 		WHERE ANO = #{ano}
 	</update>
 
+	<insert id="writeComment">
+		INSERT INTO E_COMMENT (
+			CNO,
+		    ANO,
+		    CCONTENT,
+		    CWRITER,
+		    CINSERTIP,
+		    CINSERTID
+		) VALUES (
+			E_COMMENT_SEQ.NEXTVAL,
+			#{ano},
+			#{ccontent},
+			#{cwriter},
+			#{cinsertip},
+			#{cwriter}
+		)
+	</insert>
+
 </mapper>

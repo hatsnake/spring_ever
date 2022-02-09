@@ -1,0 +1,19 @@
+package com.hatsnake.ever.article.vo;
+
+public class CommentVO {
+	private int cno;
+	private int ano;
+	private int pcno;
+	private String ccontent;
+	private String cwriter;
+	private Date cinsertdate;
+	private String cinsertip;
+	private String cinsertid;
+	private Date cupdatedate;
+	private String cupdateip;
+	private String cupdateid;
+	private String cdeleteyn;
+	private Date cdeletedate;
+	private String cdeleteip;
+	private String cdeleteid;
+}

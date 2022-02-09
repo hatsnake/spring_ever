@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hatsnake.ever.article.service.ArticleService;
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
 import com.hatsnake.ever.article.vo.ArticleVO;
+import com.hatsnake.ever.article.vo.CommentVO;
 import com.hatsnake.ever.article.vo.PageMaker;
 import com.hatsnake.ever.article.vo.SearchCriteria;
 import com.hatsnake.ever.util.RemoteAddrUtils;
@@ -117,6 +118,8 @@ public class ArticleController {
 	@GetMapping("/article/getLike")
 	@ResponseBody
 	public int getLike(int ano) throws Exception {
+		logger.info("ArticleController.getLike() 함수 시작");
+		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
 		
@@ -129,6 +132,8 @@ public class ArticleController {
 	@GetMapping("/article/checkLike")
 	@ResponseBody
 	public String checkLike(int ano, String mid) throws Exception {
+		logger.info("ArticleController.checkLike() 함수 시작");
+		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
 		articleLike.setMid(mid);
@@ -146,6 +151,8 @@ public class ArticleController {
 	@PostMapping("/article/addLike")
 	@ResponseBody
 	public String addLike(int ano, String mid) throws Exception {
+		logger.info("ArticleController.addLike() 함수 시작");
+		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
 		articleLike.setMid(mid);
@@ -163,6 +170,8 @@ public class ArticleController {
 	@PostMapping("/article/removeLike")
 	@ResponseBody
 	public String removeLike(int ano, String mid) throws Exception {
+		logger.info("ArticleController.removeLike() 함수 시작");
+		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
 		articleLike.setMid(mid);
@@ -176,4 +185,21 @@ public class ArticleController {
 		}
 	}	
 	
+	// 댓글 작성
+	@PostMapping("comment/write")
+	@ResponseBody
+	public String writeComment(CommentVO comment, HttpServletRequest req) throws Exception {
+		logger.info("ArticleController.writeComment() 함수 시작");
+		
+		String insertip = RemoteAddrUtils.RemoteAddr(req);
+		comment.setCinsertip(insertip);
+		
+		int result = articleService.writeComment(comment);
+		
+		if(result >= 1) {
+			return "true";
+		} else {
+			return "false";
+		}
+	}
 }

@@ -74,7 +74,7 @@
 						ano:ano,
 						mid:mid
 					},
-					method:"POST"
+					type:"POST"
 				})
 				.done(function(result) {
 					if(result == "true") {
@@ -98,7 +98,77 @@
 						    "&searchDate=${scri.searchDate}" +
 						    "&keyword=${scri.keyword}";
 		});
+		
+		$("#writeBtn").on("click", function() {
+			const ccontent = $("#comment").val();
+			const cwriter = $("#mid").val();
+			const ano = $("#ano").val();
+			
+			$.ajax({
+				url:"/comment/write",
+				type:"post",
+				data:{
+					ccontent : ccontent,
+					cwriter : cwriter,
+					ano : ano
+				},
+				success: function(result) {
+					console.log("결과 : " + result);
+				}
+			});
+			
+		});
+		
+		$(".reply-write").on("click", function() {
+			const tag = $(this);
+			createTextarea(tag);
+		});
+		
+		/*
+		$(".comment_inbox_text").on("keyup keydown", function() {
+			console.log("gg");
+			const textTagHeight = $(this).prop('scrollHeight');
+			$(this).css('height', textTagHeight);
+		});
+		*/
 	});
+	
+	// textarea 자동 높이
+	function autoHeight(e) {
+		const textTagHeight = $(e).prop('scrollHeight');
+		$(e).css('height', textTagHeight);
+	}
+	
+	function createTextarea(e) {
+		const commentWrapperTag = $(e).closest(".comment-wrapper");
+		
+		const commentTextareaTag = $(".comment-container").find(".comment-textarea");
+		commentTextareaTag.remove();
+		
+		const commentTextarea = `
+			<div class="comment-textarea">
+				<div class="mt-3 mb-3 ms-5 p-3" style="border:1px solid gray; border-radius:5px; background:white;">
+					<div>hatsnake</div>
+					<div class="mt-2">
+						<textarea id="comment" class="comment_inbox_text" onkeyup="autoHeight(this)" onkeydown="autoHeight(this)"  placeholder="댓글을 남겨보세요" rows="2"></textarea>
+					</div>
+					<div class="clearfix">
+						<div class="float-start">
+							<span class="me-2 fs-5"><i class="fas fa-camera"></i></span>
+							<span class="fs-5"><i class="far fa-smile"></i></span>
+						</div>
+						<div class="float-end">
+							<div id="writeBtn" class="btn btn-success btn-sm">등록</div>
+						</div>
+					</div>
+				</div>
+				<div style="border-bottom:1px solid #E1E1E1; "></div>
+			</div>			
+		`;
+		
+		commentWrapperTag.append(commentTextarea);
+	}
+	
 	
 	// 좋아요 갯수 불러오기
 	function getLike(ano) {
@@ -176,6 +246,10 @@
 		border: 0px;
 		background: transparent;
 		resize: none;
+		width:100%; 
+		overflow:hidden; 
+		overflow-wrap: break-word; 
+		height:32px;
 	}
 	
 	.comment_inbox_text:focus {
@@ -299,13 +373,14 @@
 
 			<hr>
 	
-			<!-- 텍스트아레나 -->
+			<!-- 댓글작성 -->
 			<div class="fw-bold fs-5">댓글</div>
 
 			<div class="mt-3 p-3" style="border:1px solid gray; border-radius:5px; background:white;">
 				<div>${member.mid}</div>
 				<div class="mt-2">
-					<textarea class="comment_inbox_text" placeholder="댓글을 남겨보세요" rows="2" style="width:100%; overflow:hidden; overflow-wrap: break-word; height:36px;"></textarea>
+					<textarea id="comment" class="comment_inbox_text" onkeyup="autoHeight(this)" onkeydown="autoHeight(this)" 
+							  placeholder="댓글을 남겨보세요" rows="2"></textarea>
 				</div>
 				<div class="clearfix">
 					<div class="float-start">
@@ -313,11 +388,11 @@
 						<span class="fs-5"><i class="far fa-smile"></i></span>
 					</div>
 					<div class="float-end">
-						<div class="btn btn-success btn-sm">등록</div>
+						<div id="writeBtn" class="btn btn-success btn-sm">등록</div>
 					</div>
 				</div>
 			</div>
-			<!-- /텍스트아레나 -->
+			<!-- /댓글작성 -->
 		</div>
 
 		<!-- 카드 -->
@@ -325,113 +400,85 @@
 		  <div class="card-body p-4">
 			<div class="row">
 			  <div>
-				<!-- 댓글 -->
-				<div>
-					<div class="d-flex flex-start mt-2" style="border-bottom:1px solid #E1E1E1; ">
-					  <a class="me-3" href="#">
-						<img
-						  class="rounded-circle shadow-1-strong"
-						  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-						  alt="avatar"
-						  width="36"
-						  height="36"
-						/>
-					  </a>
-					  <div style="margin-bottom:-7px; width:100%;">
-						<div>
-						  <div class="d-flex justify-content-between align-items-center">
-							<p class="mb-1 fw-bold" style="font-size:14px;">
-							  Anchovy
-							</p>
-						  </div>
-						  <p class="small mb-0">
-							아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
-						  </p>
-						  <p>
-							<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
-							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
-						  </p>
+			  	<div class="comment-container">
+					<!-- 댓글 -->
+					<div class="comment-wrapper">
+						<div class="comment-text">
+							<div class="d-flex flex-start mt-2" style="border-bottom:1px solid #E1E1E1; ">
+							  <a class="me-3" href="#">
+								<img
+								  class="rounded-circle shadow-1-strong"
+								  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
+								  alt="avatar"
+								  width="36"
+								  height="36"
+								/>
+							  </a>
+							  <div style="margin-bottom:-7px; width:100%;">
+								<div>
+								  <div class="d-flex justify-content-between align-items-center">
+									<p class="mb-1 fw-bold" style="font-size:14px;">
+									  Anchovy
+									</p>
+								  </div>
+								  <p class="small mb-0">
+									아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+								  </p>
+								  <p>
+									<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
+									<span class="text-muted reply-write" style="font-size:12px;">답글쓰기</span>
+								  </p>
+								</div>
+							  </div>
+							  <div class="flex-grow-1 flex-shrink-1">
+							  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+							  </div>
+							</div>
 						</div>
-					  </div>
-					  <div class="flex-grow-1 flex-shrink-1">
-					  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
-					  </div>
+					
 					</div>
+					<!-- /댓글 -->
+	
+					<!-- 댓글 -->
+					<div class="comment-wrapper">
+						<div class="comment-text">
+							<div class="d-flex flex-start mt-2" style="margin-left:50px; border-bottom:1px solid #E1E1E1; ">
+							  <a class="me-3" href="#">
+								<img
+								  class="rounded-circle shadow-1-strong"
+								  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
+								  alt="avatar"
+								  width="36"
+								  height="36"
+								/>
+							  </a>
+							  <div style="margin-bottom:-7px; width:100%;">
+								<div>
+								  <div class="d-flex justify-content-between align-items-center">
+									<p class="mb-1 fw-bold" style="font-size:14px;">
+									  Anchovy
+									</p>
+								  </div>
+								  <p class="small mb-0">
+									아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+								  </p>
+								  <p>
+									<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
+									<span class="text-muted reply-write" style="font-size:12px;">답글쓰기</span>
+								  </p>
+								</div>
+							  </div>
+							  <div class="flex-grow-1 flex-shrink-1">
+							  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+							  </div>
+							</div>
+						</div>
+					
+					</div>
+					<!-- /댓글 -->
+
 				</div>
-				<!-- /댓글 -->
 			
-				<!-- 대댓글 -->
-				<div>
-					<div class="d-flex flex-start mt-3" style="margin-left:50px; border-bottom:1px solid #E1E1E1;">
-					  <a class="me-3" href="#">
-						<img
-						  class="rounded-circle shadow-1-strong"
-						  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-						  alt="avatar"
-						  width="36"
-						  height="36"
-						/>
-					  </a>
-					  <div style="margin-bottom:-7px; width:100%;">
-						<div>
-						  <div class="d-flex justify-content-between align-items-center">
-							<p class="mb-1 fw-bold" style="font-size:14px;">
-							  Anchovy
-							</p>
-						  </div>
-						  <p class="small mb-0">
-							아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
-						  </p>
-						  <p>
-							<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
-							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
-						  </p>
-						</div>
-					  </div>
-					  <div class="flex-grow-1 flex-shrink-1">
-					  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
-					  </div>
-					</div>
-				</div>
-				<!-- /대댓글 -->
-
-				<!-- 대댓글 -->
-				<div>
-					<div class="d-flex flex-start mt-3" style="margin-left:50px; border-bottom:1px solid #E1E1E1;">
-					  <a class="me-3" href="#">
-						<img
-						  class="rounded-circle shadow-1-strong"
-						  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-						  alt="avatar"
-						  width="36"
-						  height="36"
-						/>
-					  </a>
-					  <div style="margin-bottom:-7px; width:100%;">
-						<div>
-						  <div class="d-flex justify-content-between align-items-center">
-							<p class="mb-1 fw-bold" style="font-size:14px;">
-							  Anchovy
-							</p>
-						  </div>
-						  <p class="small mb-0">
-							아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
-						  </p>
-						  <p>
-							<span class="text-muted me-1" style="font-size:12px;">
-								<fmt:formatDate value="${article.ainsertdate}" pattern="yyyy.MM.dd. HH:mm"/>
-							</span>
-							<span class="text-muted" style="font-size:12px;">답글쓰기</span>
-						  </p>
-						</div>
-					  </div>
-					  <div class="flex-grow-1 flex-shrink-1">
-					  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
-					  </div>
-					</div>
-				</div>
-				<!-- /대댓글 -->
-
 				<!-- 페이지네이션 -->
 				<nav class="mt-4" aria-label="Page navigation example">
 				  <ul class="pagination pagination-sm justify-content-center">

@@ -1,0 +1,44 @@
+package com.hatsnake.ever.article.vo;
+
+import java.util.Date;
+
+public class CommentVO {
+	private int cno;
+	private int ano;
+	private int pcno;
+	private String ccontent;
+	private String cwriter;
+	private Date cinsertdate;
+	private String cinsertip;
+	private String cinsertid;
+	private Date cupdatedate;
+	private String cupdateip;
+	private String cupdateid;
+	private String cdeleteyn;
+	private Date cdeletedate;
+	private String cdeleteip;
+	private String cdeleteid;
+	
+	public CommentVO(int cno, int ano, int pcno, String ccontent, 
+					 String cwriter, Date cinsertdate, String cinsertip, String cinsertid, 
+					 Date cupdatedate, String cupdateip, String cupdateid, String cdeleteyn, 
+					 Date cdeletedate, String cdeleteip, String cdeleteid) {
+		this.cno = cno;
+		this.ano = ano;
+		this.pcno = pcno;
+		this.ccontent = ccontent;
+		this.cwriter = cwriter;
+		this.cinsertdate = cinsertdate;
+		this.cinsertip = cinsertip;
+		this.cinsertid = cinsertid;
+		this.cupdatedate = cupdatedate;
+		this.cupdateip = cupdateip;
+		this.cupdateid = cupdateid;
+		this.cdeleteyn = cdeleteyn;
+		this.cdeletedate = cdeletedate;
+		this.cdeleteip = cdeleteip;
+		this.cdeleteid = cdeleteid;
+	}
+	
+	
+}
