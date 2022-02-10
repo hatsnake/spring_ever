@@ -2,31 +2,38 @@ package com.hatsnake.ever.article.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
 public class CommentVO {
 	private int cno;
 	private int ano;
 	private int pcno;
 	private String ccontent;
 	private String cwriter;
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy.MM.dd. HH:mm", timezone = "Asia/Seoul")
 	private Date cinsertdate;
 	private String cinsertip;
 	private String cinsertid;
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy.MM.dd. HH:mm", timezone = "Asia/Seoul")
 	private Date cupdatedate;
 	private String cupdateip;
 	private String cupdateid;
 	private String cdeleteyn;
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy.MM.dd. HH:mm", timezone = "Asia/Seoul")
 	private Date cdeletedate;
 	private String cdeleteip;
 	private String cdeleteid;
+	private int commentlevel;
 	
 	public CommentVO() {
 		
 	}
-	
+
 	public CommentVO(int cno, int ano, int pcno, String ccontent, 
-					 String cwriter, Date cinsertdate, String cinsertip, String cinsertid, 
-					 Date cupdatedate, String cupdateip, String cupdateid, String cdeleteyn, 
-					 Date cdeletedate, String cdeleteip, String cdeleteid) {
+					String cwriter, Date cinsertdate, String cinsertip, String cinsertid, 
+					Date cupdatedate, String cupdateip, String cupdateid, String cdeleteyn, 
+					Date cdeletedate, String cdeleteip, String cdeleteid, int commentlevel) {
 		this.cno = cno;
 		this.ano = ano;
 		this.pcno = pcno;
@@ -42,6 +49,7 @@ public class CommentVO {
 		this.cdeletedate = cdeletedate;
 		this.cdeleteip = cdeleteip;
 		this.cdeleteid = cdeleteid;
+		this.commentlevel = commentlevel;
 	}
 
 	public int getCno() {
@@ -164,13 +172,21 @@ public class CommentVO {
 		this.cdeleteid = cdeleteid;
 	}
 
+	public int getCommentlevel() {
+		return commentlevel;
+	}
+
+	public void setCommentlevel(int commentlevel) {
+		this.commentlevel = commentlevel;
+	}
+
 	@Override
 	public String toString() {
 		return "CommentVO [cno=" + cno + ", ano=" + ano + ", pcno=" + pcno + ", ccontent=" + ccontent + ", cwriter="
 				+ cwriter + ", cinsertdate=" + cinsertdate + ", cinsertip=" + cinsertip + ", cinsertid=" + cinsertid
 				+ ", cupdatedate=" + cupdatedate + ", cupdateip=" + cupdateip + ", cupdateid=" + cupdateid
 				+ ", cdeleteyn=" + cdeleteyn + ", cdeletedate=" + cdeletedate + ", cdeleteip=" + cdeleteip
-				+ ", cdeleteid=" + cdeleteid + "]";
+				+ ", cdeleteid=" + cdeleteid + ", commentlevel=" + commentlevel + "]";
 	}
 	
 }

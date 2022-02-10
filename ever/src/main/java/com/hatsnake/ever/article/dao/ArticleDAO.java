@@ -1,5 +1,6 @@
 package com.hatsnake.ever.article.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
@@ -37,4 +38,10 @@ public interface ArticleDAO {
 	
 	// 댓글 작성
 	public int writeComment(CommentVO comment) throws Exception;	
+	
+	// 댓글 리스트
+	public List<CommentVO> commentList(HashMap<String, Object> map) throws Exception;
+	
+	// 댓글 총 갯수
+	public int commentListCount(HashMap<String, Object> map) throws Exception;
 }

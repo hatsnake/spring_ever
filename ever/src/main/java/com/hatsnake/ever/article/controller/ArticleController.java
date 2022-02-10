@@ -1,6 +1,8 @@
 package com.hatsnake.ever.article.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -12,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -186,10 +187,10 @@ public class ArticleController {
 	}	
 	
 	// 댓글 작성
-	@PostMapping("comment/write")
+	@PostMapping("/comment/write")
 	@ResponseBody
-	public String writeComment(CommentVO comment, HttpServletRequest req) throws Exception {
-		logger.info("ArticleController.writeComment() 함수 시작");
+	public String commentWrite(CommentVO comment, HttpServletRequest req) throws Exception {
+		logger.info("ArticleController.commentWrite() 함수 시작");
 		
 		String insertip = RemoteAddrUtils.RemoteAddr(req);
 		comment.setCinsertip(insertip);
@@ -201,5 +202,28 @@ public class ArticleController {
 		} else {
 			return "false";
 		}
+	}
+	
+	// 댓글리스트
+	@GetMapping("/comment/list")
+	@ResponseBody
+	public HashMap<String, Object> commentList(CommentVO comment, SearchCriteria scri) throws Exception {
+		logger.info("ArticleController.commentList() 함수 시작");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("comment", comment);
+		map.put("scri", scri);
+		
+		List<CommentVO> commentList = articleService.commentList(map);
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(articleService.commentListCount(map));
+		
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		result.put("commentList", commentList);
+		result.put("pageMaker", pageMaker);
+		
+		return result;
 	}
 }

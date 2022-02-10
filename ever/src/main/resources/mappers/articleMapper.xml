@@ -165,5 +165,39 @@
 			#{cwriter}
 		)
 	</insert>
+	
+	<select id="commentList" resultType="commentVO">
+		SELECT 
+		    CNO,
+		    PCNO,
+		    ANO,
+		    LEVEL COMMENTLEVEL,
+		    CCONTENT,
+		    CWRITER,
+		    CINSERTDATE 
+		FROM (
+		    SELECT 
+		        CNO,
+		        PCNO,
+		        ANO,
+		        CCONTENT,
+		        CWRITER,
+		        CINSERTDATE,
+		        ROW_NUMBER() OVER(ORDER BY CNO DESC) AS RNUM
+		    FROM E_COMMENT
+		    WHERE ANO = #{comment.ano}
+		    AND CDELETEYN = 'N'
+		) 
+		WHERE RNUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}
+		START WITH PCNO = 0
+		CONNECT BY PRIOR CNO = PCNO
+		ORDER SIBLINGS BY CNO DESC
+	</select>
+	
+	<select id="commentListCount" resultType="int">
+		SELECT COUNT(CNO) FROM E_COMMENT
+		WHERE ANO = #{comment.ano}
+		AND CNO > 0
+	</select>
 
 </mapper>

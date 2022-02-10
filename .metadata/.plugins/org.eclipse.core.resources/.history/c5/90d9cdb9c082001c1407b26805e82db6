@@ -1,6 +1,0 @@
-package com.hatsnake.ever.article.dao;
-
-public interface ArticleDAO {
-	// 글 작성
-	private int articleWrite() throws Exception;
-}

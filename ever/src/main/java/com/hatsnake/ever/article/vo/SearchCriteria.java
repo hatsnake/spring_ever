@@ -15,8 +15,6 @@ public class SearchCriteria extends Criteria {
 		this.searchDate = searchDate;
 	}
 
-
-
 	public String getSearchType() {
 		return searchType;
 	}

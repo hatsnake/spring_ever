@@ -108,9 +108,9 @@
 				url:"/comment/write",
 				type:"post",
 				data:{
-					ccontent : ccontent,
-					cwriter : cwriter,
-					ano : ano
+					ccontent: ccontent,
+					cwriter: cwriter,
+					ano: ano
 				},
 				success: function(result) {
 					console.log("결과 : " + result);
@@ -119,19 +119,171 @@
 			
 		});
 		
-		$(".reply-write").on("click", function() {
-			const tag = $(this);
-			createTextarea(tag);
-		});
-		
-		/*
-		$(".comment_inbox_text").on("keyup keydown", function() {
-			console.log("gg");
-			const textTagHeight = $(this).prop('scrollHeight');
-			$(this).css('height', textTagHeight);
-		});
-		*/
+
+		commentList();
 	});
+	
+	function pageItemClick(page) {
+		commentList(page);
+	}
+	
+	// 댓글 리스트 생성
+	function commentList(page) {
+		const ano = $("#ano").val();
+		const commentContainer = $("#comment-container");
+		const paginationContainer = $("#pagination-container");
+		let comment = "";
+		let pagination = "";
+		
+		commentContainer.html("");
+		paginationContainer.html("");
+		
+		$.ajax({
+			url: "/comment/list",
+			type: "get",
+			data: {
+				ano: ano,
+				page: page
+			},
+			success: function(result) {
+				console.log(JSON.stringify(result, null, 4));
+				
+				// 댓글 리스트 출력
+				for(let i=0; i<result.commentList.length; i++) {
+					if(result.commentList[i].commentlevel == 1) {
+						comment = `
+							<!-- 댓글 -->
+							<div class="comment-wrapper mt-3">
+								<div class="comment-text">
+									<div class="d-flex flex-start mt-2" style="border-bottom:1px solid #E1E1E1; ">
+									  <a class="me-3" href="#">
+										<img
+										  class="rounded-circle shadow-1-strong"
+										  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
+										  alt="avatar"
+										  width="36"
+										  height="36"
+										/>
+									  </a>
+									  <div style="margin-bottom:-7px; width:100%;">
+										<div>
+										  <div class="d-flex justify-content-between align-items-center">
+											<p class="mb-1 fw-bold" style="font-size:14px;">
+											  ${"${result.commentList[i].cwriter}"}
+											</p>
+										  </div>
+										  <p class="small mb-0">
+											${"${result.commentList[i].ccontent}"}
+										  </p>
+										  <p>
+											<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
+											<span class="text-muted reply-write" style="font-size:12px;" onclick="createTextarea(this)">답글쓰기</span>
+										  </p>
+										</div>
+									  </div>
+									  <div class="flex-grow-1 flex-shrink-1">
+										<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+									  </div>
+									</div>
+								</div>
+	
+							</div>
+							<!-- /댓글 -->
+							`;
+						} else {
+							comment = `
+								<!-- 대댓글 -->
+								<div class="comment-wrapper mt-3">
+									<div class="comment-text">
+										<div class="d-flex flex-start mt-2" style="margin-left:50px; border-bottom:1px solid #E1E1E1; ">
+										  <a class="me-3" href="#">
+											<img
+											  class="rounded-circle shadow-1-strong"
+											  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
+											  alt="avatar"
+											  width="36"
+											  height="36"
+											/>
+										  </a>
+										  <div style="margin-bottom:-7px; width:100%;">
+											<div>
+											  <div class="d-flex justify-content-between align-items-center">
+												<p class="mb-1 fw-bold" style="font-size:14px;">
+												  ${"${result.commentList[i].cwriter}"}
+												</p>
+											  </div>
+											  <p class="small mb-0">
+												${"${result.commentList[i].ccontent}"}
+											  </p>
+											  <p>
+												<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
+												<span class="text-muted reply-write" style="font-size:12px;" onclick="createTextarea(this)">답글쓰기</span>
+											  </p>
+											</div>
+										  </div>
+										  <div class="flex-grow-1 flex-shrink-1">
+											<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+										  </div>
+										</div>
+									</div>
+		
+								</div>
+								<!-- /대댓글 -->				
+							`;
+						}
+					
+					
+					commentContainer.append(comment);
+				}
+				
+				// 페이지네이션 출력
+				pagination = `
+					<nav class="mt-4" aria-label="Page navigation example">
+					  <ul class="pagination pagination-sm justify-content-center">
+				`;
+				
+				if(result.pageMaker.prev === "true") {
+					pagination += `
+						<li class="page-item ms-1 me-1">
+						  <a class="page-link" href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo; 이전</span>
+						  </a>
+						</li>
+					`;
+				}
+				
+				for(let i=result.pageMaker.startPage; i<=result.pageMaker.endPage; i++) {
+					if(i == result.pageMaker.cri.page) {
+						pagination += `
+							<li class="page-item ms-1 me-1 active"><span class="page-link" onclick="pageItemClick(${"${i}"});">${"${i}"}</span></li>
+						`;						
+					} else {
+						pagination += `
+							<li class="page-item ms-1 me-1"><span class="page-link" onclick="pageItemClick(${"${i}"});">${"${i}"}</span></li>
+						`;
+					}
+				}
+				
+				if(result.pageMaker.next === "true" && pageMaker.endPage > 0) {
+					pagination += `
+						<li class="page-item ms-1 me-1">
+						  <a class="page-link" href="#" aria-label="Next">
+							<span aria-hidden="true">다음 &raquo;</span>
+						  </a>
+						</li>
+					`;
+				}
+
+				pagination += `
+					  </ul>
+					</nav>				
+				`;
+				
+				paginationContainer.append(pagination);
+				
+			}
+		})
+	}
 	
 	// textarea 자동 높이
 	function autoHeight(e) {
@@ -139,6 +291,8 @@
 		$(e).css('height', textTagHeight);
 	}
 	
+	
+	// textare 태그 생성
 	function createTextarea(e) {
 		const commentWrapperTag = $(e).closest(".comment-wrapper");
 		
@@ -148,7 +302,7 @@
 		const commentTextarea = `
 			<div class="comment-textarea">
 				<div class="mt-3 mb-3 ms-5 p-3" style="border:1px solid gray; border-radius:5px; background:white;">
-					<div>hatsnake</div>
+					<div>${member.mid}</div>
 					<div class="mt-2">
 						<textarea id="comment" class="comment_inbox_text" onkeyup="autoHeight(this)" onkeydown="autoHeight(this)"  placeholder="댓글을 남겨보세요" rows="2"></textarea>
 					</div>
@@ -400,103 +554,14 @@
 		  <div class="card-body p-4">
 			<div class="row">
 			  <div>
-			  	<div class="comment-container">
-					<!-- 댓글 -->
-					<div class="comment-wrapper">
-						<div class="comment-text">
-							<div class="d-flex flex-start mt-2" style="border-bottom:1px solid #E1E1E1; ">
-							  <a class="me-3" href="#">
-								<img
-								  class="rounded-circle shadow-1-strong"
-								  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-								  alt="avatar"
-								  width="36"
-								  height="36"
-								/>
-							  </a>
-							  <div style="margin-bottom:-7px; width:100%;">
-								<div>
-								  <div class="d-flex justify-content-between align-items-center">
-									<p class="mb-1 fw-bold" style="font-size:14px;">
-									  Anchovy
-									</p>
-								  </div>
-								  <p class="small mb-0">
-									아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
-								  </p>
-								  <p>
-									<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
-									<span class="text-muted reply-write" style="font-size:12px;">답글쓰기</span>
-								  </p>
-								</div>
-							  </div>
-							  <div class="flex-grow-1 flex-shrink-1">
-							  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
-							  </div>
-							</div>
-						</div>
-					
-					</div>
-					<!-- /댓글 -->
-	
-					<!-- 댓글 -->
-					<div class="comment-wrapper">
-						<div class="comment-text">
-							<div class="d-flex flex-start mt-2" style="margin-left:50px; border-bottom:1px solid #E1E1E1; ">
-							  <a class="me-3" href="#">
-								<img
-								  class="rounded-circle shadow-1-strong"
-								  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-								  alt="avatar"
-								  width="36"
-								  height="36"
-								/>
-							  </a>
-							  <div style="margin-bottom:-7px; width:100%;">
-								<div>
-								  <div class="d-flex justify-content-between align-items-center">
-									<p class="mb-1 fw-bold" style="font-size:14px;">
-									  Anchovy
-									</p>
-								  </div>
-								  <p class="small mb-0">
-									아니 다들 모여있었냐고 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
-								  </p>
-								  <p>
-									<span class="text-muted me-1" style="font-size:12px;">2022.01.29. 02:39</span>
-									<span class="text-muted reply-write" style="font-size:12px;">답글쓰기</span>
-								  </p>
-								</div>
-							  </div>
-							  <div class="flex-grow-1 flex-shrink-1">
-							  	<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
-							  </div>
-							</div>
-						</div>
-					
-					</div>
-					<!-- /댓글 -->
-
+			  	<div id="comment-container" class="comment-container">
+					<!-- 댓글 리스트 나오는 곳 -->
 				</div>
 			
 				<!-- 페이지네이션 -->
-				<nav class="mt-4" aria-label="Page navigation example">
-				  <ul class="pagination pagination-sm justify-content-center">
-					<li class="page-item ms-1 me-1">
-					  <a class="page-link" href="#" aria-label="Previous">
-						<span aria-hidden="true">&laquo; 이전</span>
-					  </a>
-					</li>
-					<li class="page-item ms-1 me-1"><a class="page-link" href="#">1</a></li>
-					<li class="page-item ms-1 me-1"><a class="page-link" href="#">2</a></li>
-					<li class="page-item ms-1 me-1"><a class="page-link" href="#">3</a></li>
-					<li class="page-item ms-1 me-1">
-					  <a class="page-link" href="#" aria-label="Next">
-						<span aria-hidden="true">다음 &raquo;</span>
-					  </a>
-					</li>
-				  </ul>
-				</nav>
+				<div id="pagination-container" class="pagination-container">
+					<!-- 페이지네이션 나오는 곳 -->
+				</div>
 				<!-- /페이지네이션 -->
 
 			  </div>

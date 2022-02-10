@@ -1,5 +1,6 @@
 package com.hatsnake.ever.article.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -92,6 +93,20 @@ public class ArticleServiceImpl implements ArticleService {
 		logger.info("ArticleServiceImpl.writeComment() 함수 시작");
 		
 		return articleDao.writeComment(comment);
+	}
+
+	@Override
+	public List<CommentVO> commentList(HashMap<String, Object> map) throws Exception {
+		logger.info("ArticleServiceImpl.commentList() 함수 시작");
+		
+		return articleDao.commentList(map);
+	}
+
+	@Override
+	public int commentListCount(HashMap<String, Object> map) throws Exception {
+		logger.info("ArticleServiceImpl.commentListCount() 함수 시작");
+		
+		return articleDao.commentListCount(map);
 	}
 
 }
