@@ -33,7 +33,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleVO> articleList(SearchCriteria scri) throws Exception {
+	public List<HashMap<String, Object>> articleList(SearchCriteria scri) throws Exception {
 		logger.info("ArticleServiceImpl.articleList() 함수 시작");
 		
 		return articleDao.articleList(scri);
@@ -47,7 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleVO> articleView(ArticleVO article) throws Exception {
+	public List<HashMap<String, Object>> articleView(ArticleVO article) throws Exception {
 		logger.info("ArticleServiceImpl.articleView() 함수 시작");
 		
 		return articleDao.articleView(article);
@@ -96,7 +96,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<CommentVO> commentList(HashMap<String, Object> map) throws Exception {
+	public List<HashMap<String, Object>> commentList(HashMap<String, Object> map) throws Exception {
 		logger.info("ArticleServiceImpl.commentList() 함수 시작");
 		
 		return articleDao.commentList(map);
@@ -107,6 +107,13 @@ public class ArticleServiceImpl implements ArticleService {
 		logger.info("ArticleServiceImpl.commentListCount() 함수 시작");
 		
 		return articleDao.commentListCount(map);
+	}
+
+	@Override
+	public int writeCommentReply(CommentVO comment) throws Exception {
+		logger.info("ArticleServiceImpl.writeCommentReply() 함수 시작");
+		
+		return articleDao.writeCommentReply(comment);
 	}
 
 }

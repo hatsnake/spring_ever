@@ -122,7 +122,9 @@
 					  	</a>
 					  </td>
 					  <td class="text-truncate">
-					  	<span>${article.awriter}</span>
+					  	<span class="dropdown">
+					  		${article.mnickname}
+					  	</span>
 					  </td>
 					  <td class="text-center text-truncate">
 					  	<span>

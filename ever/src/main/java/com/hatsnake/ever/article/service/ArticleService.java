@@ -13,13 +13,13 @@ public interface ArticleService {
 	public int articleWrite(ArticleVO article) throws Exception;
 	
 	// 글 리스트
-	public List<ArticleVO> articleList(SearchCriteria scri) throws Exception;
+	public List<HashMap<String, Object>> articleList(SearchCriteria scri) throws Exception;
 	
 	// 글 총 갯수
 	public int articleListCount(SearchCriteria scri) throws Exception;
 	
 	// 글 상세정보
-	public List<ArticleVO> articleView(ArticleVO article) throws Exception;
+	public List<HashMap<String, Object>> articleView(ArticleVO article) throws Exception;
 	
 	// 좋아요 갯수 가져오기
 	public int getLike(ArticleLikeVO articleLike) throws Exception;
@@ -40,9 +40,11 @@ public interface ArticleService {
 	public int writeComment(CommentVO comment) throws Exception;
 	
 	// 댓글 리스트
-	public List<CommentVO> commentList(HashMap<String, Object> map) throws Exception;
+	public List<HashMap<String, Object>> commentList(HashMap<String, Object> map) throws Exception;
 	
 	// 댓글 총 갯수
 	public int commentListCount(HashMap<String, Object> map) throws Exception;
 	
+	// 대댓글 작성
+	public int writeCommentReply(CommentVO comment) throws Exception;	
 }

@@ -6,8 +6,10 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="$(this)"/>
+		<item key="selection" value="commentCount"/>
 		<list key="findhistory">
+			<item value="commentCount"/>
+			<item value="${member.mid}"/>
 			<item value="$(this)"/>
 			<item value="this"/>
 			<item value="comment"/>
@@ -21,8 +23,6 @@
 			<item value="text-dark"/>
 			<item value="add"/>
 			<item value="push"/>
-			<item value="enter"/>
-			<item value="focusout"/>
 		</list>
 		<list key="replacehistory">
 		</list>

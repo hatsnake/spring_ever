@@ -6,6 +6,7 @@
 <mapper namespace="articleMapper">
 
 	<insert id="articleWrite" parameterType="articleVO" useGeneratedKeys="true" keyColumn="ano" keyProperty="ano">
+		<!-- 글 작성 후, 글 상세보기로 바로 넘어가기 위해서 -->
 		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
 			SELECT E_ARTICLE_SEQ.NEXTVAL AS ano FROM DUAL
 		</selectKey>
@@ -22,8 +23,8 @@
 			AINSERTID
 		) VALUES (
 			#{ano},
-			#{atitle},
-			#{acontent},
+			#{atitle, jdbcType=VARCHAR},
+			#{acontent, jdbcType=VARCHAR},
 			#{awriter},
 			#{acategoryno},
 			#{acategorynoref},
@@ -40,33 +41,26 @@
 	</select>
 	-->
 
-	<select id="articleList" resultType="articleVO" parameterType="searchCriteria">
+	<select id="articleList" resultType="HashMap" parameterType="searchCriteria">
 		SELECT 
-		    ANO,
-		    ACATEGORYNO,
-		    ACATEGORYNOREF,
-		    ATITLE,
-		    ACONTENT,
-		    AWRITER,
-		    AINSERTDATE,
-		    AVIEWCNT
+			*
 		FROM (
 		    SELECT 
-		        ANO,
-		        ACATEGORYNO,
-		        ACATEGORYNOREF,
-		        ATITLE,
-		        ACONTENT,
-		        AWRITER,
-		        AINSERTDATE,
-		        AVIEWCNT,
-		        ROW_NUMBER() OVER(ORDER BY ANO DESC) AS RNUM
-		    FROM E_ARTICLE
-		    WHERE 1 = 1
+		        E.ANO "ano",
+		        E.ACATEGORYNO "acategoryno",
+		        E.ACATEGORYNOREF "acategorynoref",
+		        E.ATITLE "atitle",
+		        E.ACONTENT "acontent",
+		        E.AINSERTDATE "ainsertdate",
+		        E.AVIEWCNT "aviewcnt",
+		        M.MNO "mno",
+		        M.MNICKNAME "mnickname",
+		        ROW_NUMBER() OVER(ORDER BY E.ANO DESC) "RNUM"
+		    FROM E_ARTICLE E, E_MEMBER M
+		    WHERE E.AWRITER = M.MNO
 		    <include refid="search"></include>
-		) E
+		)
 		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
-		ORDER BY ANO DESC
 	</select>
 	
 	<select id="articleListCount" parameterType="searchCriteria" resultType="int">
@@ -109,9 +103,21 @@
 		</if>
 	</sql>
 	
-	<select id="articleView" resultType="articleVO">
-		SELECT * FROM E_ARTICLE
-		WHERE ANO = #{ano}
+	<select id="articleView" resultType="HashMap">
+		SELECT 
+			A.ANO "ano",
+			A.ATITLE "atitle",
+			A.ACONTENT "acontent",
+			A.AVIEWCNT "aviewcnt",
+			A.ACATEGORYNO "acategoryno",
+			A.ACATEGORYNOREF "acategorynoref",
+			A.AINSERTDATE "ainsertdate",
+			M.MNO "mno",
+			M.MID "mid",
+			M.MNICKNAME "mnickname"
+		FROM  E_ARTICLE A, E_MEMBER M
+		WHERE A.AWRITER = M.MNO 
+		AND   ANO = #{ano}
 	</select>
 
 	<select id="getLike" resultType="int">
@@ -122,24 +128,24 @@
 	<select id="checkLike" resultType="int">
 		SELECT COUNT(LNO) FROM E_ARTICLE_LIKE
 		WHERE ANO = #{ano}
-		AND   MID = #{mid}
+		AND   MNO = #{mno}
 	</select>
 	
 	<insert id="addLike">
 		INSERT INTO E_ARTICLE_LIKE (
 			LNO,
 			ANO,
-			MID
+			MNO
 		) VALUES (
 			E_ARTICLE_LIKE_SEQ.NEXTVAL,
 			#{ano},
-			#{mid}
+			#{mno}
 		)
 	</insert>
 	
 	<delete id="removeLike">
 		DELETE FROM E_ARTICLE_LIKE 
-		WHERE MID = #{mid}
+		WHERE MNO = #{mno}
 	</delete>
 	
 	<update id="viewCountUp">
@@ -166,7 +172,8 @@
 		)
 	</insert>
 	
-	<select id="commentList" resultType="commentVO">
+	<select id="commentList" resultType="HashMap">
+		<!--  
 		SELECT 
 		    CNO,
 		    PCNO,
@@ -192,6 +199,34 @@
 		START WITH PCNO = 0
 		CONNECT BY PRIOR CNO = PCNO
 		ORDER SIBLINGS BY CNO DESC
+		-->
+		
+		SELECT 
+		  *
+		FROM (
+		    SELECT 
+		      *
+		    FROM (
+		        SELECT 
+		            A.CNO "cno",
+		            A.PCNO "pcno", 
+		            A.ANO "ano",
+		            LEVEL "commentlevel",
+		            A.CCONTENT "ccontent",
+		            A.CWRITER "cwriter",
+		            TO_CHAR(A.CINSERTDATE, 'yyyy.MM.dd. HH:mm') "cinsertdate",
+		            M.MNICKNAME "mnickname",
+		            ROWNUM "NUM"
+		        FROM E_COMMENT A, E_MEMBER M
+		        WHERE  A.CWRITER = M.MNO
+		        AND ANO = #{comment.ano}
+		        AND CDELETEYN = 'N'
+		        START WITH PCNO = 0 -- 시작형
+		        CONNECT BY PRIOR CNO = PCNO -- 연결
+		        ORDER SIBLINGS BY CNO DESC -- 정렬순서
+		    ) B
+		) C
+		WHERE NUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}	
 	</select>
 	
 	<select id="commentListCount" resultType="int">
@@ -199,5 +234,25 @@
 		WHERE ANO = #{comment.ano}
 		AND CNO > 0
 	</select>
+
+	<insert id="writeCommentReply">
+		INSERT INTO E_COMMENT (
+			CNO,
+			PCNO,
+		    ANO,
+		    CCONTENT,
+		    CWRITER,
+		    CINSERTIP,
+		    CINSERTID
+		) VALUES (
+			E_COMMENT_SEQ.NEXTVAL,
+			#{pcno},
+			#{ano},
+			#{ccontent},
+			#{cwriter},
+			#{cinsertip},
+			#{cwriter}
+		)	
+	</insert>
 
 </mapper>

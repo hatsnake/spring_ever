@@ -3,16 +3,16 @@ package com.hatsnake.ever.article.vo;
 public class ArticleLikeVO {
 	private int lno;
 	private int ano;
-	private String mid;
+	private int mno;
 	
 	public ArticleLikeVO() {
 		
 	}
 	
-	public ArticleLikeVO(int lno, int ano, String mid) {
+	public ArticleLikeVO(int lno, int ano, int mno) {
 		this.lno = lno;
 		this.ano = ano;
-		this.mid = mid;
+		this.mno = mno;
 	}
 
 	public int getLno() {
@@ -31,17 +31,17 @@ public class ArticleLikeVO {
 		this.ano = ano;
 	}
 
-	public String getMid() {
-		return mid;
+	public int getMno() {
+		return mno;
 	}
 
-	public void setMid(String mid) {
-		this.mid = mid;
+	public void setMno(int mno) {
+		this.mno = mno;
 	}
 
 	@Override
 	public String toString() {
-		return "ArticleLikeVO [lno=" + lno + ", ano=" + ano + ", mid=" + mid + "]";
+		return "ArticleLikeVO [lno=" + lno + ", ano=" + ano + ", mno=" + mno + "]";
 	}
-	
+
 }

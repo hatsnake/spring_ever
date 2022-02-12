@@ -16,10 +16,10 @@
 	$(document).ready(function() {
 		
 		const ano = $("#ano").val();
-		const mid = $("#mid").val();
+		const mno = $("#mno").val();
 		
-		checkLike(ano, mid);
-		getLike(ano, mid);
+		checkLike(ano, mno);
+		getLike(ano);
 		
 		$("#topBtn").on("click", function() {
 			$("html, body").animate({ scrollTop:0 }, 100);
@@ -34,7 +34,7 @@
 			const heartCountTag = $("#heartCount");
 			
 			// 로그인 여부 파악하기
-			if(!mid) {
+			if(!mno) {
 				let result = confirm("이 기능은 로그인 멤버만 사용할 수 있습니다.\n로그인하시겠습니까?");
 				if(result) {
 					location.href="/member/login";	
@@ -48,8 +48,8 @@
 				$.ajax({
 					url: "/article/addLike",
 					data: {
-						ano:ano,
-						mid:mid
+						ano: ano,
+						mno: mno
 					},
 					method:"POST"
 				})
@@ -71,8 +71,8 @@
 				$.ajax({
 					url: "/article/removeLike",
 					data: {
-						ano:ano,
-						mid:mid
+						ano: ano,
+						mno: mno
 					},
 					type:"POST"
 				})
@@ -99,10 +99,18 @@
 						    "&keyword=${scri.keyword}";
 		});
 		
+		// 댓글 작성
 		$("#writeBtn").on("click", function() {
-			const ccontent = $("#comment").val();
-			const cwriter = $("#mid").val();
-			const ano = $("#ano").val();
+			const ccontentTag = $("#comment");
+			const ccontent = ccontentTag.val();
+			/*
+			const cwriterTag = $("#mid");
+			const cwriter = cwriterTag.val();
+			*/
+			const cwriterTag = $("#mno");
+			const cwriter = cwriterTag.val();		
+			const anoTag = $("#ano");
+			const ano = anoTag.val();
 			
 			$.ajax({
 				url:"/comment/write",
@@ -113,7 +121,8 @@
 					ano: ano
 				},
 				success: function(result) {
-					console.log("결과 : " + result);
+					ccontentTag.val("");
+					commentList();
 				}
 			});
 			
@@ -146,7 +155,16 @@
 				page: page
 			},
 			success: function(result) {
-				console.log(JSON.stringify(result, null, 4));
+				//console.log(JSON.stringify(result, null, 4));
+				
+				console.log(JSON.stringify(result.commentList[0].COMMENTLEVEL, null, 4))
+				
+				$(".commentCount").html(result.pageMaker.totalCount);
+				
+				let element = document.getElementById("scrollPlace");
+				console.log(element);
+				
+				element.scrollIntoView({ behavior:'smooth', block: 'center'});
 				
 				// 댓글 리스트 출력
 				for(let i=0; i<result.commentList.length; i++) {
@@ -169,7 +187,7 @@
 										<div>
 										  <div class="d-flex justify-content-between align-items-center">
 											<p class="mb-1 fw-bold" style="font-size:14px;">
-											  ${"${result.commentList[i].cwriter}"}
+											  ${"${result.commentList[i].mnickname}"}
 											</p>
 										  </div>
 										  <p class="small mb-0">
@@ -177,7 +195,8 @@
 										  </p>
 										  <p>
 											<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
-											<span class="text-muted reply-write" style="font-size:12px;" onclick="createTextarea(this)">답글쓰기</span>
+											<span class="text-muted reply-write" style="font-size:12px;" 
+												  onclick="createTextarea(this)" data-pcno="${"${result.commentList[i].cno}"}">답글쓰기</span>
 										  </p>
 										</div>
 									  </div>
@@ -209,7 +228,7 @@
 											<div>
 											  <div class="d-flex justify-content-between align-items-center">
 												<p class="mb-1 fw-bold" style="font-size:14px;">
-												  ${"${result.commentList[i].cwriter}"}
+												  ${"${result.commentList[i].mnickname}"}
 												</p>
 											  </div>
 											  <p class="small mb-0">
@@ -217,7 +236,8 @@
 											  </p>
 											  <p>
 												<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
-												<span class="text-muted reply-write" style="font-size:12px;" onclick="createTextarea(this)">답글쓰기</span>
+												<span class="text-muted reply-write" style="font-size:12px;" 
+													  onclick="createTextarea(this)" data-pcno="${"${result.commentList[i].cno}"}">답글쓰기</span>
 											  </p>
 											</div>
 										  </div>
@@ -296,13 +316,15 @@
 	function createTextarea(e) {
 		const commentWrapperTag = $(e).closest(".comment-wrapper");
 		
+		const pcno = commentWrapperTag.find(".reply-write").attr("data-pcno");
+		
 		const commentTextareaTag = $(".comment-container").find(".comment-textarea");
 		commentTextareaTag.remove();
 		
 		const commentTextarea = `
 			<div class="comment-textarea">
 				<div class="mt-3 mb-3 ms-5 p-3" style="border:1px solid gray; border-radius:5px; background:white;">
-					<div>${member.mid}</div>
+					<div>${member.mnickname}</div>
 					<div class="mt-2">
 						<textarea id="comment" class="comment_inbox_text" onkeyup="autoHeight(this)" onkeydown="autoHeight(this)"  placeholder="댓글을 남겨보세요" rows="2"></textarea>
 					</div>
@@ -312,7 +334,7 @@
 							<span class="fs-5"><i class="far fa-smile"></i></span>
 						</div>
 						<div class="float-end">
-							<div id="writeBtn" class="btn btn-success btn-sm">등록</div>
+							<div class="btn btn-success btn-sm" onclick="addReply(this, ${"${pcno}"})">등록</div>
 						</div>
 					</div>
 				</div>
@@ -346,19 +368,19 @@
 	}
 	
 	// 내가 좋아요 누른지 안 누른지 확인
-	function checkLike(ano, mid) {
+	function checkLike(ano, mno) {
 		const heartIconTag = $("#heartIcon");
 		const heartClass = heartIconTag.attr("class");
 		const heartCountTag = $("#heartCount");
 		
-		if(!mid) {
+		if(!mno) {
 			heartIconTag.attr("class", "far fa-heart");
 		} else {
 			$.ajax({
 				url: "/article/checkLike",
 				data: {
-					ano:ano,
-					mid:mid
+					ano: ano,
+					mno: mno
 				},
 				method:"GET"
 			})
@@ -373,6 +395,31 @@
 				alert("좋아요 기능에 문제가 발생하였습니다. (checkLike)");
 			});
 		}
+	}
+	
+	// 답글
+	function addReply(e, pcno) {
+		const commentTextareaTag = $(e).closest(".comment-textarea");
+		const ano = $("#ano").val();
+		const ccontent = commentTextareaTag.find(".comment_inbox_text").val();
+		const cwriterTag = $("#mno");
+		const cwriter = cwriterTag.val();
+		
+		$.ajax({
+			url: "/comment/write",
+			method: "post",
+			data: {
+				ano: ano,
+				ccontent: ccontent,
+				cwriter: cwriter,
+				pcno: pcno
+			},
+			success: function(result) {
+				console.log("성공 : " + result);
+				commentList();
+			}
+			
+		})
 	}
 	
 </script>
@@ -426,6 +473,8 @@
  <main id="main" class="main">
 	<input type="hidden" id="ano" value="${article.ano}">
 	<input type="hidden" id="mid" value="${member.mid}">
+	<input type="hidden" id="mno" value="${member.mno}">
+	<input type="hidden" id="mnickname" value="${member.mnickname}">
 	
     <div class="container pagetitle clearfix" style="width:860px; margin:0 auto;">
       <div class="float-end">
@@ -455,12 +504,12 @@
 					<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="profile-image" style="width:36px; height:36px;">
 					<div class="w-100 ms-3">
 						<div style="font-size:14px;">
-							<span class="me-1 fw-bold">${article.awriter}</span>
+							<span class="me-1 fw-bold">${article.mnickname}</span>
 							<span>침팬치</span>
 							<div class="badge badge-sm" style="background:#d4d4d4; color:#000; border-radius:5px;">1:1 채팅</div>
 						</div>
 						<div class="text-muted mt-1" style="font-size:12px;">
-							<span class="me-1">2022.01.29. 17:04</span> 
+							<span class="me-1">${article.ainsertdate}</span> 
 							<span>
 								<span>조회</span>
 								<span>${article.aviewcnt}</span>
@@ -473,7 +522,7 @@
 						<span class="me-2" style="font-size:13px;">
 							<i class="far fa-comment-dots"></i>&nbsp;
 							<span>댓글</span> 
-							<span class="fw-bold">17</span>
+							<span class="commentCount fw-bold">0</span>
 						</span>
 						<span class="me-2" style="font-size:13px;">URL 복사</span>
 						<span>
@@ -492,7 +541,7 @@
 				<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="profile-image" style="width:36px; height:36px;">
 				<div class="w-100 ms-3">
 					<div style="font-size:12px; line-height:40px;">
-						<span class="fw-bold" style="font-size:16px;">${article.awriter}</span>
+						<span class="fw-bold" style="font-size:16px;">${article.mnickname}</span>
 						<span>님의 게시글 더보기 ></span>
 					</div>
 				</div>
@@ -513,7 +562,7 @@
 						  </span>
 						</i>
 						<span style="font-size:12px;">댓글</span> 
-						<span style="font-size:14px; font-weight:bold;">17</span>
+						<span class="commentCount" style="font-size:14px; font-weight:bold;">0</span>
 					</span>
 				</div>
 				<div class="float-end">
@@ -528,10 +577,10 @@
 			<hr>
 	
 			<!-- 댓글작성 -->
-			<div class="fw-bold fs-5">댓글</div>
+			<div id="scrollPlace" class="fw-bold fs-5">댓글</div>
 
 			<div class="mt-3 p-3" style="border:1px solid gray; border-radius:5px; background:white;">
-				<div>${member.mid}</div>
+				<div>${member.mnickname}</div>
 				<div class="mt-2">
 					<textarea id="comment" class="comment_inbox_text" onkeyup="autoHeight(this)" onkeydown="autoHeight(this)" 
 							  placeholder="댓글을 남겨보세요" rows="2"></textarea>
@@ -571,7 +620,7 @@
 		<!-- /카드 -->
 	</div>
 
-	<div class="clearfix mt-2">
+	<div class="container clearfix mt-2" style="width:860px; margin:0 auto;">
 		<div class="float-start">
 			<a href="/article/write" class="btn btn-success btn-sm">
 				<i class="fas fa-pen"></i>

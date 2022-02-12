@@ -101,8 +101,9 @@
 		</div>
 		<hr>
 		<form id="writeForm" name="writeForm">
-			<input type="hidden" name="awriter" value="${member.mid}">
-			<input type="hidden" name="ainsertid" value="${member.mid}">
+			<input type="hidden" name="awriter" value="${member.mno}">
+			<input type="hidden" name="ainsertid" value="${member.mno}">
+			<!-- hashTag 값 -->
 			<input type="hidden" id="atag" name="atag">
 			<div class="row mb-2">
 				<select class="form-select me-2" name="acategoryno" style="width:630px; margin-left:12px;">

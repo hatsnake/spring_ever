@@ -7,13 +7,13 @@ public class ArticleVO {
 	private int ano;
 	private String atitle;
 	private String acontent;
-	private String awriter;
+	private int awriter;
 	private int aviewcnt;
 	private int acategoryno;
 	private int acategorynoref;
 	private Date ainsertdate;
 	private String ainsertip;
-	private String ainsertid;
+	private int ainsertid;
 	private Date aupdatedate;
 	private String aupdateip;
 	private String aupdateid;
@@ -25,9 +25,9 @@ public class ArticleVO {
 		
 	}
 
-	public ArticleVO(int ano, String atitle, String acontent, String awriter, 
+	public ArticleVO(int ano, String atitle, String acontent, int awriter, 
 					 int aviewcnt, int acategoryno, int acategorynoref, Date ainsertdate, 
-					 String ainsertip, String ainsertid, Date aupdatedate, String aupdateip, 
+					 String ainsertip, int ainsertid, Date aupdatedate, String aupdateip, 
 					 String aupdateid, String adeleteyn, String adeleteip, String adeleteid) {
 		super();
 		this.ano = ano;
@@ -72,11 +72,11 @@ public class ArticleVO {
 		this.acontent = acontent;
 	}
 
-	public String getAwriter() {
+	public int getAwriter() {
 		return awriter;
 	}
 
-	public void setAwriter(String awriter) {
+	public void setAwriter(int awriter) {
 		this.awriter = awriter;
 	}
 
@@ -120,11 +120,11 @@ public class ArticleVO {
 		this.ainsertip = ainsertip;
 	}
 
-	public String getAinsertid() {
+	public int getAinsertid() {
 		return ainsertid;
 	}
 
-	public void setAinsertid(String ainsertid) {
+	public void setAinsertid(int ainsertid) {
 		this.ainsertid = ainsertid;
 	}
 

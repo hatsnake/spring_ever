@@ -31,7 +31,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> articleList(SearchCriteria scri) throws Exception {
+	public List<HashMap<String, Object>> articleList(SearchCriteria scri) throws Exception {
 		logger.info("ArticleDAOImpl.articleList() 함수 시작");
 		
 		return sqlSession.selectList("articleMapper.articleList", scri);
@@ -45,7 +45,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 	
 	@Override
-	public List<ArticleVO> articleView(ArticleVO article) throws Exception {
+	public List<HashMap<String, Object>> articleView(ArticleVO article) throws Exception {
 		logger.info("ArticleDAOImpl.articleView() 함수 시작");
 		
 		return sqlSession.selectList("articleMapper.articleView", article);
@@ -94,7 +94,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<CommentVO> commentList(HashMap<String, Object> map) throws Exception {
+	public List<HashMap<String, Object>> commentList(HashMap<String, Object> map) throws Exception {
 		logger.info("ArticleDAOImpl.commentList() 함수 시작");
 		
 		return sqlSession.selectList("articleMapper.commentList", map);
@@ -105,6 +105,13 @@ public class ArticleDAOImpl implements ArticleDAO {
 		logger.info("ArticleDAOImpl.commentListCount() 함수 시작");
 		
 		return sqlSession.selectOne("articleMapper.commentListCount", map);
+	}
+
+	@Override
+	public int writeCommentReply(CommentVO comment) throws Exception {
+		logger.info("ArticleDAOImpl.writeCommentReply() 함수 시작");
+		
+		return sqlSession.insert("articleMapper.writeCommentReply", comment);
 	}
 
 }

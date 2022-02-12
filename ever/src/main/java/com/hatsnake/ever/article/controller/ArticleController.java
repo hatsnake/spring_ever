@@ -45,6 +45,7 @@ public class ArticleController {
 	public String write(ArticleVO article, HttpServletRequest req, String atag) throws Exception {
 		logger.info("ArticleController.write() 함수 시작");
 		logger.info("atag : " + atag);
+		System.out.println("article : " + article);
 		
 		String insertip = RemoteAddrUtils.RemoteAddr(req);
 		article.setAinsertip(insertip);
@@ -59,7 +60,7 @@ public class ArticleController {
 	public String list(Model model, SearchCriteria scri) throws Exception {
 		logger.info("ArticleController.list() 함수 시작");
 		
-		List<ArticleVO> articleList = articleService.articleList(scri);
+		List<HashMap<String, Object>> articleList = articleService.articleList(scri);
 		model.addAttribute("articleList", articleList);
 		
 		PageMaker pageMaker = new PageMaker();
@@ -77,7 +78,9 @@ public class ArticleController {
 					   HttpServletRequest req, HttpServletResponse res) throws Exception {
 		logger.info("ArticleController.view() 함수 시작");
 		int ano = article.getAno();
+		System.out.println("ano : " + ano);
 		
+		// 쿠키 생성
 		Cookie oldCookie = null;
 		Cookie[] cookies = req.getCookies();
 		if(cookies != null) {
@@ -104,7 +107,7 @@ public class ArticleController {
 			res.addCookie(newCookie);
 		}
 		
-		List<ArticleVO> articleList = articleService.articleView(article);
+		List<HashMap<String, Object>> articleList = articleService.articleView(article);
 		
 		if(articleList.size() != 1) 
 			return "redirect:/";
@@ -132,12 +135,12 @@ public class ArticleController {
 	// 좋아요 체크 여부
 	@GetMapping("/article/checkLike")
 	@ResponseBody
-	public String checkLike(int ano, String mid) throws Exception {
+	public String checkLike(int ano, int mno) throws Exception {
 		logger.info("ArticleController.checkLike() 함수 시작");
 		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
-		articleLike.setMid(mid);
+		articleLike.setMno(mno);
 		
 		int checkLike = articleService.checkLike(articleLike);
 		
@@ -151,12 +154,12 @@ public class ArticleController {
 	// 좋아요 추가
 	@PostMapping("/article/addLike")
 	@ResponseBody
-	public String addLike(int ano, String mid) throws Exception {
+	public String addLike(int ano, int mno) throws Exception {
 		logger.info("ArticleController.addLike() 함수 시작");
 		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
-		articleLike.setMid(mid);
+		articleLike.setMno(mno);
 		
 		int result = articleService.addLike(articleLike);
 		
@@ -170,12 +173,12 @@ public class ArticleController {
 	// 좋아요 삭제
 	@PostMapping("/article/removeLike")
 	@ResponseBody
-	public String removeLike(int ano, String mid) throws Exception {
+	public String removeLike(int ano, int mno) throws Exception {
 		logger.info("ArticleController.removeLike() 함수 시작");
 		
 		ArticleLikeVO articleLike = new ArticleLikeVO();
 		articleLike.setAno(ano);
-		articleLike.setMid(mid);
+		articleLike.setMno(mno);
 		
 		int result = articleService.removeLike(articleLike);
 		
@@ -191,11 +194,15 @@ public class ArticleController {
 	@ResponseBody
 	public String commentWrite(CommentVO comment, HttpServletRequest req) throws Exception {
 		logger.info("ArticleController.commentWrite() 함수 시작");
-		
+		int result = 0;
 		String insertip = RemoteAddrUtils.RemoteAddr(req);
 		comment.setCinsertip(insertip);
 		
-		int result = articleService.writeComment(comment);
+		if(comment.getPcno() == 0) {
+			result = articleService.writeComment(comment);
+		} else {
+			result = articleService.writeCommentReply(comment);
+		}
 		
 		if(result >= 1) {
 			return "true";
@@ -214,7 +221,7 @@ public class ArticleController {
 		map.put("comment", comment);
 		map.put("scri", scri);
 		
-		List<CommentVO> commentList = articleService.commentList(map);
+		List<HashMap<String, Object>> commentList = articleService.commentList(map);
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(scri);
