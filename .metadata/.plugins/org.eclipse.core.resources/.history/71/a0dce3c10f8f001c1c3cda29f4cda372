@@ -1,0 +1,47 @@
+package com.hatsnake.ever.member.vo;
+
+public class CovidPageVO {
+	private String numofrows;
+	private String pageno;
+	private String totalcount;
+	
+	public CovidPageVO() {
+		
+	}
+	
+	public CovidPageVO(String numofrows, String pageno, String totalcount) {
+		this.numofrows = numofrows;
+		this.pageno = pageno;
+		this.totalcount = totalcount;
+	}
+
+	public String getNumofrows() {
+		return numofrows;
+	}
+
+	public void setNumofrows(String numofrows) {
+		this.numofrows = numofrows;
+	}
+
+	public String getPageno() {
+		return pageno;
+	}
+
+	public void setPageno(String pageno) {
+		this.pageno = pageno;
+	}
+
+	public String getTotalcount() {
+		return totalcount;
+	}
+
+	public void setTotalcount(String totalcount) {
+		this.totalcount = totalcount;
+	}
+
+	@Override
+	public String toString() {
+		return "CovidPageVO [numofrows=" + numofrows + ", pageno=" + pageno + ", totalcount=" + totalcount + "]";
+	}
+	
+}

@@ -1,0 +1,9 @@
+package com.hatsnake.ever.member.vo;
+
+public class CovidVO {
+	private String accDefRate;
+	private String accExamCnt;
+	private String deathCnt;
+	private String decideCnt;
+	private String createDt;
+}

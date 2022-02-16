@@ -6,8 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="commentCount"/>
+		<item key="selection" value="member"/>
 		<list key="findhistory">
+			<item value="member"/>
 			<item value="commentCount"/>
 			<item value="${member.mid}"/>
 			<item value="$(this)"/>
@@ -22,7 +23,6 @@
 			<item value="java.lang.IllegalStateException: Optional int parameter &apos;ano&apos; is present but cannot be translated into a null value due to being declared as a primitive type. Consider declaring it as object wrapper for the corresponding primitive type."/>
 			<item value="text-dark"/>
 			<item value="add"/>
-			<item value="push"/>
 		</list>
 		<list key="replacehistory">
 		</list>

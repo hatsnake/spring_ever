@@ -2,6 +2,6 @@
 <typeInfoHistroy>
 <typeInfo handle="=ever/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.hatsnake.ever.member.dao{MemberDAO.java[MemberDAO" modifiers="513" timestamp="1644381370288"/>
 <typeInfo handle="=ever/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.hatsnake.ever.member.service{MemberService.java[MemberService" modifiers="513" timestamp="1644381370294"/>
-<typeInfo handle="=ever/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.hatsnake.ever.article.service{ArticleService.java[ArticleService" modifiers="513" timestamp="1644576240633"/>
-<typeInfo handle="=ever/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.hatsnake.ever.article.dao{ArticleDAO.java[ArticleDAO" modifiers="513" timestamp="1644576232888"/>
+<typeInfo handle="=ever/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.hatsnake.ever.article.service{ArticleService.java[ArticleService" modifiers="513" timestamp="1644647156753"/>
+<typeInfo handle="=ever/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.hatsnake.ever.article.dao{ArticleDAO.java[ArticleDAO" modifiers="513" timestamp="1644647165227"/>
 </typeInfoHistroy>

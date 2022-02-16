@@ -27,8 +27,5 @@
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
     </bean>
-    
-    <!-- component-scan -->
-    <context:component-scan base-package="com.hatsnake.ever.member.**"></context:component-scan>
-    <context:component-scan base-package="com.hatsnake.ever.article.**"></context:component-scan>
+
 </beans>
