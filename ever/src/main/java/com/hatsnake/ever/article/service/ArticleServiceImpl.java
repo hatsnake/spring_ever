@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +24,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 	private final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 	
-	@Inject
-	private ArticleDAO articleDao;
+	private final ArticleDAO articleDao;
+	
+	@Autowired
+	public ArticleServiceImpl(ArticleDAO articleDao) {
+		this.articleDao = articleDao;
+	}
 	
 	@Override
 	public int articleWrite(ArticleVO article) throws Exception {

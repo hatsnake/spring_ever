@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+
+	<insert id="register">
+		INSERT INTO E_MEMBER (
+			MNO,
+			MID,
+			MPASSWORD,
+			MNICKNAME,
+			MNAME,
+			MBIRTH,
+			MGENDER,
+			MEMAIL,
+			MPHONE,
+			MINSERTDATE,
+			MINSERTIP
+		) VALUES ( 
+			E_MEMBER_SEQ.nextval,
+			#{mid},
+			#{mpassword},
+			#{mnickname},
+			#{mname},
+			#{mbirth},
+			#{mgender},
+			#{memail},
+			#{mphone},
+			SYSDATE,
+			#{minsertip}
+		)
+	</insert>
+	
+	<select id="login" resultType="memberVO">
+		SELECT * FROM E_MEMBER
+		WHERE MID = #{mid}
+		AND   MPASSWORD = #{mpassword}
+		AND   MDELETEYN = 'N'
+	</select>
+	
+	<update id="memberUpdate">
+		UPDATE E_MEMBER SET
+			MNAME = #{mname},
+			MNICKNAME = #{mnickname},
+			MBIRTH = #{mbirth},
+			MIMAGE = #{mimage},
+			MGENDER = #{mgender},
+			MEMAIL = #{memail},
+			MPHONE = #{mphone},
+			MZIP = #{mzip},
+			MADDR1 = #{maddr1},
+			MADDR2 = #{maddr2},
+			MUPDATEDATE = SYSDATE,
+			MUPDATEID = #{mupdateid},
+			MUPDATEIP = #{mupdateip}
+		WHERE MNO = #{mno} 
+	</update>
+	
+	<select id="memberSelect" resultType="memberVO">
+		SELECT * FROM E_MEMBER
+		WHERE MDELETEYN = 'N'
+		AND   MNO = #{mno}
+	</select>
+	
+</mapper>

@@ -136,7 +136,7 @@
 	function removeImage() {
 		console.log("remove");
 		$("#profileImg").attr("src", "/upload/displayFile?fileName=/default.png")
-		$("#profile").val("/upload/displayFile?fileName=/default.png");		
+		$("#profile").val("default.png");		
 	}
 </script>
 <style>
@@ -157,7 +157,7 @@
 	<h1>파일 업로드 하기</h1>
 	
 	<form method="post" action="/upload">
-		<input type="hidden" name="profile" id="profile" value="/upload/displayFile?fileName=/default.png">
+		<input type="hidden" name="profile" id="profile" value="default.png">
 		<div>아이디</div>
 		<input type="text" name="id"> <br>
 		<div>이름</div>

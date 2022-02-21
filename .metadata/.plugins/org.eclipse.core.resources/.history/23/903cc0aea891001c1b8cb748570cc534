@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+
+	<select id="memberNicknameCheck" resultType="int">
+		SELECT /*+ INDEX(E_MEMBER SYS_C0011858) */ 
+			COUNT(mno)
+		FROM E_MEMBER
+		WHERE MNICKNAME = #{mnickname}
+		AND MDELETEYN = 'N'	
+	</select>
+
+	<select id="memberIdCheck" resultType="int">
+		SELECT /*+ INDEX(E_MEMBER SYS_C0011858) */ 
+			COUNT(mno)
+		FROM E_MEMBER
+		WHERE MID = #{mid}
+		AND MDELETEYN = 'N'
+	</select>
+
+	<insert id="register">
+		INSERT INTO E_MEMBER (
+			MNO,
+			MID,
+			MPASSWORD,
+			MNICKNAME,
+			MNAME,
+			MBIRTH,
+			MGENDER,
+			MEMAIL,
+			MPHONE,
+			MINSERTDATE,
+			MINSERTIP
+		) VALUES ( 
+			E_MEMBER_SEQ.nextval,
+			#{mid},
+			#{mpassword},
+			#{mnickname},
+			#{mname},
+			#{mbirth},
+			#{mgender},
+			#{memail},
+			#{mphone},
+			SYSDATE,
+			#{minsertip}
+		)
+	</insert>
+	
+	<select id="login" resultType="HashMap">
+		SELECT 
+			M.MNO "mno",
+			M.MID "mid",
+			M.MNICKNAME "mnickname",
+			M.MNAME "mname",
+			M.MIMAGE "mimage",
+			M.MBIRTH "mbirth",
+			M.MGENDER "mgender",
+			M.MEMAIL "memail",
+			M.MPHONE "mphone",
+			M.MZIP "zip",
+			M.MADDR1 "maddr1",
+			M.MADDR2 "maddr2",
+			M.MVISITEDCOUNT "mvisitedcount",
+			M.MCOMMENTCOUNT "mcommentcount",
+			M.MBOARDCOUNT "mboardcount",
+			M.MINSERTDATE "minsertdate",
+			A.MAUTHNAME "mauthname"		
+		FROM E_MEMBER M, E_MEMBER_AUTH A
+		WHERE M.MAUTHID = A.MAUTHID
+		AND   M.MID = #{mid}
+		AND   M.MPASSWORD = #{mpassword}
+		AND   M.MDELETEYN = 'N'
+	</select>
+	
+	<update id="memberUpdate">
+		UPDATE E_MEMBER SET
+			MNAME = #{mname},
+			MNICKNAME = #{mnickname},
+			MBIRTH = #{mbirth},
+			MIMAGE = #{mimage},
+			MGENDER = #{mgender},
+			MEMAIL = #{memail},
+			MPHONE = #{mphone},
+			MZIP = #{mzip},
+			MADDR1 = #{maddr1},
+			MADDR2 = #{maddr2},
+			MUPDATEDATE = SYSDATE,
+			MUPDATEID = #{mupdateid},
+			MUPDATEIP = #{mupdateip}
+		WHERE MNO = #{mno} 
+	</update>
+	
+	<!-- 자신의 프로필 필요한 정보 조회 -->
+	<select id="memberSelect" resultType="HashMap">
+		SELECT 
+			M.MNO "mno",
+			M.MID "mid",
+			M.MNICKNAME "mnickname",
+			M.MNAME "mname",
+			M.MIMAGE "mimage",
+			M.MBIRTH "mbirth",
+			M.MGENDER "mgender",
+			M.MEMAIL "memail",
+			M.MPHONE "mphone",
+			M.MZIP "mzip",
+			M.MADDR1 "maddr1",
+			M.MADDR2 "maddr2",
+			M.MVISITEDCOUNT "mvisitedcount",
+			M.MCOMMENTCOUNT "mcommentcount",
+			M.MBOARDCOUNT "mboardcount",
+			M.MINSERTDATE "minsertdate",
+			A.MAUTHNAME "mauthname"			
+		FROM E_MEMBER M, E_MEMBER_AUTH A
+		WHERE M.MAUTHID = A.MAUTHID
+		AND   M.MDELETEYN = 'N'
+		AND   M.MNO = #{mno}
+	</select>
+	
+	<!-- 방문자 수 조회 -->
+	<select id="publicProfileVisitedCount" resultType="int">
+		SELECT
+			M.MVISITEDCOUNT "mvisitedcount"
+		FROM E_MEMBER M
+		WHERE M.MNO = ${mno}
+	</select>
+	
+	<!-- 게시글 수 조회 -->
+	<select id="publicProfileArticleCount" resultType="int">
+		SELECT
+			COUNT(A.ANO)
+		FROM E_ARTICLE A
+		WHERE A.AWRITER = ${mno}	
+	</select>
+	
+	<!-- 댓글 수 조회 -->
+	<select id="publicProfileCommentCount" resultType="int">
+		SELECT
+			COUNT(C.CNO)
+		FROM E_COMMENT C
+		WHERE C.CWRITER = ${mno}	
+	</select>
+	
+	<!-- 공개 프로필 게시글 리스트 -->
+	<select id="publicProfileArticleList" resultType="map">
+		SELECT
+			*
+		FROM (
+			SELECT
+		        A.ANO "ano",
+		        A.ACATEGORYNO "acategoryno",
+		        A.ACATEGORYNOREF "acategorynoref",
+		        A.ATITLE "atitle",
+		        A.ACONTENT "acontent",
+		        A.AINSERTDATE "ainsertdate",
+		        A.AVIEWCNT "aviewcnt",
+		        A.ADELETEYN "adeleteyn",
+		        M.MNO "mno",
+		        M.MNICKNAME "mnickname",
+		        ROW_NUMBER() OVER(ORDER BY A.ANO DESC) "RNUM"
+		    FROM E_ARTICLE A, E_MEMBER M
+		    WHERE A.AWRITER = M.MNO
+		    AND A.AWRITER = #{member.mno}
+		    AND A.ADELETEYN = 'N'
+		)
+		WHERE RNUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}
+	</select>
+	
+	<!-- 공개 프로필 게시글 수 -->
+	<select id="publicProfileArticleListCount" resultType="int">
+		SELECT 
+			COUNT(A.ANO)
+		FROM E_ARTICLE A
+		WHERE A.AWRITER = #{member.mno}
+		AND ANO > 0
+	</select>
+	<!-- 공개 프로필 댓글 리스트 -->
+	<select id="publicProfileCommentList" resultType="map">
+		SELECT
+			*
+		FROM (
+			SELECT
+		        A.ANO "ano",
+		        A.ACATEGORYNO "acategoryno",
+		        A.ACATEGORYNOREF "acategorynoref",
+		        A.ATITLE "atitle",
+		        A.ACONTENT "acontent",
+		        A.AINSERTDATE "ainsertdate",
+		        A.AVIEWCNT "aviewcnt",
+		        A.ADELETEYN "adeleteyn",
+		        M.MNO "mno",
+		        M.MNICKNAME "mnickname",
+		        ROW_NUMBER() OVER(ORDER BY A.ANO DESC) "RNUM"
+		    FROM  E_ARTICLE A, E_MEMBER M, E_COMMENT C
+		    WHERE A.AWRITER = M.MNO
+		    AND   A.ANO = C.ANO
+		    AND   A.AWRITER = #{member.mno}
+		    AND   C.CDELETEYN = 'N'
+		)
+		WHERE RNUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}	
+	</select>
+	<!-- 공개 프로필 댓글 수 -->
+	<select id="publicProfileCommentListCount" resultType="int">
+		SELECT
+			COUNT(C.CNO)
+		FROM E_COMMENT C
+		WHERE C.CWRITER = #{member.mno}
+		AND CNO > 0
+	</select>
+	
+</mapper>

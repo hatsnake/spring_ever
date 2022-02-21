@@ -132,6 +132,20 @@
 		commentList();
 	});
 	
+	// 클립 주소 복사
+	function clip() {
+		let url = "";
+		const textarea = document.createElement("textarea");
+		document.body.appendChild(textarea);
+		url = window.document.location.href;
+		textarea.value = url;
+		textarea.select();
+		document.execCommand("copy");
+		document.body.removeChild(textarea);
+		alert("URL이 복사되었습니다.");
+	}
+	
+	// 댓글 페이지네이션 리스트 클릭시 commentList 재실행
 	function pageItemClick(page) {
 		commentList(page);
 	}
@@ -155,9 +169,7 @@
 				page: page
 			},
 			success: function(result) {
-				//console.log(JSON.stringify(result, null, 4));
-				
-				console.log(JSON.stringify(result.commentList[0].COMMENTLEVEL, null, 4))
+				console.log(JSON.stringify(result.commentList[0], null, 4))
 				
 				$(".commentCount").html(result.pageMaker.totalCount);
 				
@@ -168,47 +180,61 @@
 				
 				// 댓글 리스트 출력
 				for(let i=0; i<result.commentList.length; i++) {
-					if(result.commentList[i].commentlevel == 1) {
-						comment = `
-							<!-- 댓글 -->
-							<div class="comment-wrapper mt-3">
-								<div class="comment-text">
-									<div class="d-flex flex-start mt-2" style="border-bottom:1px solid #E1E1E1; ">
-									  <a class="me-3" href="#">
-										<img
-										  class="rounded-circle shadow-1-strong"
-										  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
-										  alt="avatar"
-										  width="36"
-										  height="36"
-										/>
-									  </a>
-									  <div style="margin-bottom:-7px; width:100%;">
-										<div>
-										  <div class="d-flex justify-content-between align-items-center">
-											<p class="mb-1 fw-bold" style="font-size:14px;">
-											  ${"${result.commentList[i].mnickname}"}
-											</p>
+					if(result.commentList[i].cdeleteyn == "N") {
+						if(result.commentList[i].commentlevel == 1) {
+							comment = `
+								<!-- 댓글 -->
+								<div class="comment-wrapper mt-3">
+									<div class="comment-text">
+										<div class="d-flex flex-start mt-2" style="border-bottom:1px solid #E1E1E1; ">
+										  <a class="me-3" href="#">
+											<img
+											  class="rounded-circle shadow-1-strong"
+											  src="/upload/displayFile?fileName=/${"${result.commentList[i].mimage}"}"
+											  alt="avatar"
+											  width="36"
+											  height="36"
+											/>
+										  </a>
+										  <div style="margin-bottom:-7px; width:100%;">
+											<div>
+											  <div class="d-flex justify-content-between align-items-center">
+												<p class="mb-1 fw-bold" style="font-size:14px;">
+												  ${"${result.commentList[i].mnickname}"}
+												</p>
+											  </div>
+											  <p class="small mb-0">
+												${"${result.commentList[i].ccontent}"}
+											  </p>
+											  <p>
+												<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
+												<span class="text-muted reply-write" style="font-size:12px;" 
+													  onclick="createTextarea(this)" data-pcno="${"${result.commentList[i].cno}"}">답글쓰기</span>
+											  </p>
+											</div>
 										  </div>
-										  <p class="small mb-0">
-											${"${result.commentList[i].ccontent}"}
-										  </p>
-										  <p>
-											<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
-											<span class="text-muted reply-write" style="font-size:12px;" 
-												  onclick="createTextarea(this)" data-pcno="${"${result.commentList[i].cno}"}">답글쓰기</span>
-										  </p>
+										  <div class="flex-grow-1 flex-shrink-1">
+											
+											<span class="filter">
+												<a class="icon me-1 fw-bold" href="#" data-bs-toggle="dropdown" style="color:black;">
+													<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+												</a>
+												<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+												  <li><a class="dropdown-item" href="#">수정</a></li>
+												  <li><a class="dropdown-item" href="#">삭제</a></li>
+												  <!--  
+												  <li><a class="dropdown-item" href="#">This Month</a></li>
+												  <li><a class="dropdown-item" href="#">This Year</a></li>
+												  -->
+												</ul>
+											</span>
+										  </div>
 										</div>
-									  </div>
-									  <div class="flex-grow-1 flex-shrink-1">
-										<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
-									  </div>
 									</div>
+		
 								</div>
-	
-							</div>
-							<!-- /댓글 -->
-							`;
+								<!-- /댓글 -->
+								`;
 						} else {
 							comment = `
 								<!-- 대댓글 -->
@@ -218,7 +244,7 @@
 										  <a class="me-3" href="#">
 											<img
 											  class="rounded-circle shadow-1-strong"
-											  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp"
+											  src="/upload/displayFile?fileName=/${"${result.commentList[i].mimage}"}"
 											  alt="avatar"
 											  width="36"
 											  height="36"
@@ -251,7 +277,48 @@
 								<!-- /대댓글 -->				
 							`;
 						}
-					
+					} else {
+						comment = `
+							<!-- 대댓글 -->
+							<div class="comment-wrapper mt-3">
+								<div class="comment-text">
+									<div class="d-flex flex-start mt-2" style="margin-left:50px; border-bottom:1px solid #E1E1E1; ">
+									  <a class="me-3" href="#">
+										<img
+										  class="rounded-circle shadow-1-strong"
+										  src="/upload/displayFile?fileName=/${"${result.commentList[i].mimage}"}"
+										  alt="avatar"
+										  width="36"
+										  height="36"
+										/>
+									  </a>
+									  <div style="margin-bottom:-7px; width:100%;">
+										<div>
+										  <div class="d-flex justify-content-between align-items-center">
+											<p class="mb-1 fw-bold" style="font-size:14px;">
+											  ${"${result.commentList[i].mnickname}"}
+											</p>
+										  </div>
+										  <p class="small mb-0">
+											삭제된 댓글입니다.
+										  </p>
+										  <p>
+											<span class="text-muted me-1" style="font-size:12px;">${"${result.commentList[i].cinsertdate}"}</span>
+											<span class="text-muted reply-write" style="font-size:12px;" 
+												  onclick="createTextarea(this)" data-pcno="${"${result.commentList[i].cno}"}">답글쓰기</span>
+										  </p>
+										</div>
+									  </div>
+									  <div class="flex-grow-1 flex-shrink-1">
+										<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
+									  </div>
+									</div>
+								</div>
+	
+							</div>
+							<!-- /대댓글 -->				
+						`;
+					}						
 					
 					commentContainer.append(comment);
 				}
@@ -480,7 +547,7 @@
       <div class="float-end">
 		<div class="btn btn-sm fw-bold" style="background:#e6e6e6;"><i class="fas fa-chevron-up"></i> &nbsp; 이전글</div>
 		<div class="btn btn-sm fw-bold" style="background:#e6e6e6;"><i class="fas fa-chevron-down"></i> &nbsp; 다음글</div>
-		<div class="btn btn-sm fw-bold" style="background:#e6e6e6;">목록</div>
+		<div class="btn btn-sm fw-bold list_btn" style="background:#e6e6e6;">목록</div>
 	  </div>
     </div><!-- End Page Title -->
 	
@@ -492,6 +559,7 @@
 			<input type="hidden" id="searchType" name="searchType" value="${scri.searchType}" />
 			<input type="hidden" id="searchDate" name="searchType" value="${scri.searchType}" />
 			<input type="hidden" id="keyword" name="keyword" value="${scri.keyword}" />
+			<input type="hidden" id="articleMno" name="articleMno" value="${article.mno}" />
 		</form>
 		<div class="mt-3 p-4" style="border:1px solid gray; border-radius:5px;">
 			<div class="ms-1" style="color:#03c75a; font-size:13px;">${article.acategoryno} <i class="fas fa-chevron-right"></i></div>
@@ -501,15 +569,27 @@
 			</div>
 			<div class="clearfix">
 				<div class="float-start d-flex align-items-start mt-2"> 
-					<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="profile-image" style="width:36px; height:36px;">
+					<img src="/upload/displayFile?fileName=/${article.mimage}" class="rounded-circle" alt="profile-image" 
+					     style="width:47px; height:36px;">
 					<div class="w-100 ms-3">
 						<div style="font-size:14px;">
-							<span class="me-1 fw-bold">${article.mnickname}</span>
+							<span class="filter">
+								<a class="icon me-1 fw-bold" href="#" data-bs-toggle="dropdown" style="color:black;">${article.mnickname}</a>
+								<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+								  <li><a class="dropdown-item" href="/member/memberPublicProfile?mno=${article.mno}">게시글보기</a></li>
+								  <!--  
+								  <li><a class="dropdown-item" href="#">This Month</a></li>
+								  <li><a class="dropdown-item" href="#">This Year</a></li>
+								  -->
+								</ul>
+							</span>
 							<span>침팬치</span>
 							<div class="badge badge-sm" style="background:#d4d4d4; color:#000; border-radius:5px;">1:1 채팅</div>
 						</div>
 						<div class="text-muted mt-1" style="font-size:12px;">
-							<span class="me-1">${article.ainsertdate}</span> 
+							<span class="me-1">
+								<fmt:formatDate value="${article.ainsertdate}" pattern="yyyy.MM.dd. HH:mm"></fmt:formatDate>
+							</span> 
 							<span>
 								<span>조회</span>
 								<span>${article.aviewcnt}</span>
@@ -524,7 +604,11 @@
 							<span>댓글</span> 
 							<span class="commentCount fw-bold">0</span>
 						</span>
-						<span class="me-2" style="font-size:13px;">URL 복사</span>
+						<span class="me-2">
+							<a href="#" onclick="clip(); return false;" style="font-size:13px; color:black;">
+								URL 복사
+							</a>
+						</span>
 						<span>
 							<i class="fas fa-ellipsis-v" style="color:#b2b2b2; font-size:16px;"></i>
 						</span>
@@ -538,7 +622,8 @@
 			</div>
 
 			<div class="d-flex align-items-start mt-4"> 
-				<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="profile-image" style="width:36px; height:36px;">
+				<img src="/upload/displayFile?fileName=/${article.mimage}" class="rounded-circle" alt="profile-image" 
+				     style="width:40px; height:36px;">
 				<div class="w-100 ms-3">
 					<div style="font-size:12px; line-height:40px;">
 						<span class="fw-bold" style="font-size:16px;">${article.mnickname}</span>
@@ -600,7 +685,7 @@
 
 		<!-- 카드 -->
 		<div class="card mt-4" style="box-shadow:none !important; background:transparent;">
-		  <div class="card-body p-4">
+		  <div class="card-body">
 			<div class="row">
 			  <div>
 			  	<div id="comment-container" class="comment-container">

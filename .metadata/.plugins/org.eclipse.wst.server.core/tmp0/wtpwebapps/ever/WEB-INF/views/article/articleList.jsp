@@ -122,9 +122,19 @@
 					  	</a>
 					  </td>
 					  <td class="text-truncate">
+					    <div class="filter">
+							<a class="icon" href="#" data-bs-toggle="dropdown" style="color:black;">${article.mnickname}</a>
+							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+							  <li><a class="dropdown-item" href="#">Today</a></li>
+							  <li><a class="dropdown-item" href="#">This Month</a></li>
+							  <li><a class="dropdown-item" href="#">This Year</a></li>
+							</ul>
+						</div>
+						<!--  
 					  	<span class="dropdown">
 					  		${article.mnickname}
 					  	</span>
+					  	-->
 					  </td>
 					  <td class="text-center text-truncate">
 					  	<span>
@@ -202,7 +212,7 @@
 		
 		</form>
 		
-		<div id="writeBtn" class="btn btn-success btn-sm">글쓰기</div>
+		<div id="writeBtn" class="btn btn-success btn-sm mt-2">글쓰기</div>
 
 	</div>
 

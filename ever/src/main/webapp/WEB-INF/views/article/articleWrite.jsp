@@ -27,6 +27,7 @@
 		$(document).ready(function() {
 
 			$("#writeBtn").on("click", function() {
+				/*
 				const count = $(".hashtag").length;
 				let hashtagText = "";
 				for(let i=0; i<count; i++) {
@@ -34,6 +35,7 @@
 				}
 				
 				$("#atag").val(hashtagText.slice(0, -1));
+				*/
 				
 				const writeForm = $("#writeForm"); 
 				writeForm.attr("action", "/article/write");
@@ -58,16 +60,59 @@
 					    ['para', ['ul', 'ol', 'paragraph']],
 					    ['height', ['height']],
 					    ['insert',['picture','link','video']],
-					    ['view', ['fullscreen', 'help']]
+					    ['view', ['fullscreen', 'help', 'codeview']]
 					  ],
 				fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
 				fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-				disableResizeEditor: true
+				disableResizeEditor: true,
+				callbacks: {
+					/*
+					onImageUpload: function(files, editor, welEditable) {
+						for(let file of files) {
+							if(file.size > 1024 * 1024 * 5) {
+								alert("이미지는 5MB 미만입니다.");
+								return;
+							}
+							if(file.name.substring(file.name.lastIndexOf(".") + 1).toUpperCase() != "JPG") {
+								alert("JPG 이미지 형식만 가능합니다.");
+							}
+						}
+						
+						for(let file of files) {
+							sendFile(file, this);
+						}
+					}	
+					*/
+					onImageUpload: function(files) {
+						sendFile(files[0], this);
+					}
+					
+				}
 			});
 			
 			$(".note-statusbar").hide();
 			
 		});
+		
+		// 비동기로 파일을 저장하고 파일명을 이미지 태그에 url을 심어서 날린다.
+		function sendFile(file, editor) {
+			let data = new FormData();
+			data.append("file", file);
+			console.log(file);
+			
+			$.ajax({
+				data: data,
+				type: "post",
+				url: "/article/uploadImage",
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					console.log(data);
+					console.log(editor);
+					$(editor).summernote("editor.insertImage", data.url);
+				}
+			});
+		}
 		
 		// 특수문자 입력 방지
 		function characterCheck(obj){

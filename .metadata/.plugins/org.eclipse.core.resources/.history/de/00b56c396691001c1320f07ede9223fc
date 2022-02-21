@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="articleMapper">
+
+	<insert id="articleWrite" parameterType="articleVO" useGeneratedKeys="true" keyColumn="ano" keyProperty="ano">
+		<!-- 글 작성 후, 글 상세보기로 바로 넘어가기 위해서 -->
+		<selectKey keyProperty="ano" resultType="int" order="BEFORE">
+			SELECT E_ARTICLE_SEQ.NEXTVAL AS ano FROM DUAL
+		</selectKey>
+		
+		INSERT INTO E_ARTICLE ( 
+			ANO,
+		    ATITLE,
+			ACONTENT,
+			AWRITER,
+			ACATEGORYNO,
+			ACATEGORYNOREF,
+			AINSERTDATE,
+			AINSERTIP,
+			AINSERTID
+		) VALUES (
+			#{ano},
+			#{atitle, jdbcType=VARCHAR},
+			#{acontent, jdbcType=VARCHAR},
+			#{awriter},
+			#{acategoryno},
+			#{acategorynoref},
+			SYSDATE,
+			#{ainsertip},
+			#{ainsertid}
+		)
+	</insert>
+	
+	<!--  
+	<select id="articleList" resultType="articleVO">
+		SELECT * FROM E_ARTICLE
+		ORDER BY ANO DESC
+	</select>
+	-->
+
+	<select id="articleList" resultType="HashMap" parameterType="searchCriteria">
+		SELECT 
+			*
+		FROM (
+		    SELECT 
+		        E.ANO "ano",
+		        E.ACATEGORYNO "acategoryno",
+		        E.ACATEGORYNOREF "acategorynoref",
+		        E.ATITLE "atitle",
+		        E.ACONTENT "acontent",
+		        E.AINSERTDATE "ainsertdate",
+		        E.AVIEWCNT "aviewcnt",
+		        M.MNO "mno",
+		        M.MNICKNAME "mnickname",
+		        ROW_NUMBER() OVER(ORDER BY E.ANO DESC) "RNUM"
+		    FROM E_ARTICLE E, E_MEMBER M
+		    WHERE E.AWRITER = M.MNO
+		    <include refid="search"></include>
+		)
+		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+	</select>
+	
+	<select id="articleListCount" parameterType="searchCriteria" resultType="int">
+		SELECT COUNT(ANO) FROM E_ARTICLE
+		WHERE 1 = 1
+		<include refid="search"></include>
+		AND ANO > 0
+	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">AND ATITLE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'c'.toString()">AND ACONTENT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'w'.toString()">AND AWRITER LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'tc'.toString()">AND (ATITLE LIKE '%' || #{keyword} || '%') or (ACONTENT LIKE '%' || #{keyword} || '%')</if>
+		</if>
+		
+		<if test="searchDate != null || searchDate != all">
+			<!-- all, 1d, 1w, 1m, 6m, 1y -->
+			<if test="searchDate == '1d'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(SYSDATE -1, 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>
+			<if test="searchDate == '1w'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(SYSDATE -7, 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>
+			<if test="searchDate == '1m'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>
+			<if test="searchDate == '6m'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE, -6), 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>	
+			<if test="searchDate == '1y'.toString()">
+				AND AINSERTDATE BETWEEN TO_DATE(TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'YYYYMMDD'), 'YYYYMMDD')
+				AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD') + 1, 'YYYYMMDD')
+			</if>						
+		</if>
+	</sql>
+	
+	<select id="articleView" resultType="HashMap">
+		SELECT 
+			A.ANO "ano",
+			A.ATITLE "atitle",
+			A.ACONTENT "acontent",
+			A.AVIEWCNT "aviewcnt",
+			A.ACATEGORYNO "acategoryno",
+			A.ACATEGORYNOREF "acategorynoref",
+			A.AINSERTDATE "ainsertdate",
+			M.MNO "mno",
+			M.MID "mid",
+			M.MNICKNAME "mnickname",
+			M.MIMAGE "mimage"
+		FROM  E_ARTICLE A, E_MEMBER M
+		WHERE A.AWRITER = M.MNO 
+		AND   ANO = #{ano}
+	</select>
+
+	<select id="getLike" resultType="int">
+		SELECT COUNT(LNO) FROM E_ARTICLE_LIKE
+		WHERE ANO = #{ano}
+	</select>
+	
+	<select id="checkLike" resultType="int">
+		SELECT COUNT(LNO) FROM E_ARTICLE_LIKE
+		WHERE ANO = #{ano}
+		AND   MNO = #{mno}
+	</select>
+	
+	<insert id="addLike">
+		INSERT INTO E_ARTICLE_LIKE (
+			LNO,
+			ANO,
+			MNO
+		) VALUES (
+			E_ARTICLE_LIKE_SEQ.NEXTVAL,
+			#{ano},
+			#{mno}
+		)
+	</insert>
+	
+	<delete id="removeLike">
+		DELETE FROM E_ARTICLE_LIKE 
+		WHERE MNO = #{mno}
+	</delete>
+	
+	<update id="viewCountUp">
+		UPDATE E_ARTICLE SET 
+		AVIEWCNT = (AVIEWCNT + 1)
+		WHERE ANO = #{ano}
+	</update>
+
+	<insert id="writeComment">
+		INSERT INTO E_COMMENT (
+			CNO,
+		    ANO,
+		    CCONTENT,
+		    CWRITER,
+		    CINSERTIP,
+		    CINSERTID
+		) VALUES (
+			E_COMMENT_SEQ.NEXTVAL,
+			#{ano},
+			#{ccontent},
+			#{cwriter},
+			#{cinsertip},
+			#{cwriter}
+		)
+	</insert>
+	
+	<select id="commentList" resultType="HashMap">
+		<!--  
+		SELECT 
+		    CNO,
+		    PCNO,
+		    ANO,
+		    LEVEL COMMENTLEVEL,
+		    CCONTENT,
+		    CWRITER,
+		    CINSERTDATE 
+		FROM (
+		    SELECT 
+		        CNO,
+		        PCNO,
+		        ANO,
+		        CCONTENT,
+		        CWRITER,
+		        CINSERTDATE,
+		        ROW_NUMBER() OVER(ORDER BY CNO DESC) AS RNUM
+		    FROM E_COMMENT
+		    WHERE ANO = #{comment.ano}
+		    AND CDELETEYN = 'N'
+		) 
+		WHERE RNUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}
+		START WITH PCNO = 0
+		CONNECT BY PRIOR CNO = PCNO
+		ORDER SIBLINGS BY CNO DESC
+		-->
+		
+		SELECT 
+		  *
+		FROM (
+		    SELECT 
+		      *
+		    FROM (
+		        SELECT 
+		            A.CNO "cno",
+		            A.PCNO "pcno", 
+		            A.ANO "ano",
+		            LEVEL "commentlevel",
+		            A.CCONTENT "ccontent",
+		            A.CWRITER "cwriter",
+		            TO_CHAR(A.CINSERTDATE, 'yyyy.MM.dd. HH:mm') "cinsertdate",
+		            M.MNICKNAME "mnickname",
+		            M.MIMAGE "mimage",
+		            ROWNUM "NUM"
+		        FROM E_COMMENT A, E_MEMBER M
+		        WHERE  A.CWRITER = M.MNO
+		        AND ANO = #{comment.ano}
+		        AND CDELETEYN = 'N'
+		        START WITH PCNO = 0 -- 시작형
+		        CONNECT BY PRIOR CNO = PCNO -- 연결
+		        ORDER SIBLINGS BY CNO DESC -- 정렬순서
+		    ) B
+		) C
+		WHERE NUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}	
+	</select>
+	
+	<select id="commentListCount" resultType="int">
+		SELECT COUNT(CNO) FROM E_COMMENT
+		WHERE ANO = #{comment.ano}
+		AND CNO > 0
+	</select>
+
+	<insert id="writeCommentReply">
+		INSERT INTO E_COMMENT (
+			CNO,
+			PCNO,
+		    ANO,
+		    CCONTENT,
+		    CWRITER,
+		    CINSERTIP,
+		    CINSERTID
+		) VALUES (
+			E_COMMENT_SEQ.NEXTVAL,
+			#{pcno},
+			#{ano},
+			#{ccontent},
+			#{cwriter},
+			#{cinsertip},
+			#{cwriter}
+		)	
+	</insert>
+
+</mapper>

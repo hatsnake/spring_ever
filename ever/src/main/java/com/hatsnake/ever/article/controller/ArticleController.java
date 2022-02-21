@@ -1,21 +1,28 @@
 package com.hatsnake.ever.article.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hatsnake.ever.article.service.ArticleService;
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
@@ -32,6 +39,13 @@ public class ArticleController {
 	
 	@Inject
 	private ArticleService articleService;
+	
+	@Resource(name="articleUploadPath")
+	private String uploadPath;
+	
+	public ArticleController(ArticleService articleService) {
+		this.articleService = articleService;
+	}
 	
 	// 글작성
 	@GetMapping("/article/write")
@@ -54,7 +68,7 @@ public class ArticleController {
 		
 		return "redirect:/article/view?ano=" + result; 
 	}
-
+	
 	// 글 리스트
 	@GetMapping("/article/list")
 	public String list(Model model, SearchCriteria scri) throws Exception {
@@ -233,4 +247,39 @@ public class ArticleController {
 		
 		return result;
 	}
+	
+	// 파일 전송
+	@PostMapping("/article/uploadImage")
+	@ResponseBody
+	public HashMap<String, Object> summernoteUploadImage(@RequestParam("file") MultipartFile file) {
+		HashMap<String, Object> jsonResult = summernoteUploadImageFile(file);
+		System.out.println(jsonResult);
+		
+		return jsonResult;
+	}
+	
+	public HashMap<String, Object> summernoteUploadImageFile(MultipartFile file) {
+		HashMap<String, Object> hashMap = new HashMap<>();
+		
+		// String fileRoot = "C:\\summernoteImg\\";
+		String originalFileName = file.getOriginalFilename();
+		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+		
+		String saveFileName = UUID.randomUUID()+extension;
+			
+		File targetFile = new File(uploadPath+ "\\" + saveFileName);
+		
+		try {
+			InputStream fileStream = file.getInputStream();
+			FileUtils.copyInputStreamToFile(fileStream, targetFile);
+			hashMap.put("url", "/articleImage/" + saveFileName);
+			hashMap.put("responseCode", "succcess");
+		} catch(IOException e) {
+			FileUtils.deleteQuietly(targetFile);
+			hashMap.put("responseCode", "error");
+			e.printStackTrace();
+		}	
+		return hashMap;
+	}
+
 }

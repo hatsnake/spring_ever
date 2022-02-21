@@ -3,11 +3,10 @@ package com.hatsnake.ever.article.dao;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hatsnake.ever.article.vo.ArticleLikeVO;
@@ -20,8 +19,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 	private final Logger logger = LoggerFactory.getLogger(ArticleDAOImpl.class);
 	
-	@Inject
-	private SqlSession sqlSession;
+	private final SqlSession sqlSession;
+	
+	@Autowired
+	public ArticleDAOImpl(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
 	
 	@Override
 	public int articleWrite(ArticleVO article) throws Exception {

@@ -55,8 +55,59 @@
 					}
 				});
 			});
+			
+			$("#file").on("change", function(e) {
+				imageChange(e);		
+			});			
 		
 		});
+		
+		function imageChange(e) {
+			//const files = event.originalEvent.dataTransfer.files;
+			//const file = files[0];
+			const file = $("#file")[0].files[0];
+			console.log(file);
+			const fileName = file.name;
+			let ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+			ext = ext.toLowerCase();
+			
+			if(ext != "jpg" && ext != "jpeg" && ext != "gif" && ext != "png" && ext != "bmp") {
+				alert("썸네일은 이미지만 가능합니다.");
+				return;
+			}
+			
+			const formData = new FormData();
+			formData.append("file", file);
+			
+			$.ajax({
+				url: "/uploadAjax",
+				method: "post",
+				data: formData,
+				dataType: "text",
+				processData: false,
+				contentType: false,
+				success: function(data) {
+					let str = "";
+					if(checkImageType(data)) {
+						
+						//str = `
+						//	<div>
+						//		<a href="/upload/displayFile?fileName=${"${getImageLink(data)}"}">
+						//			<img src="/upload/displayFile?fileName=${"${data}"}">
+						//		</a>
+						//	</div>
+						//`;
+						
+						str = `
+							<img id="profileImg" src="/upload/displayFile?fileName=${"${data}"}" style="width:100px; height:100px; border-radius:50%;">
+						`;
+						$("#mimage").val(data);
+					}
+					
+					$(".uploadedList").html(str);
+				}
+			});				
+		}
 		
 		function mbirthFunc() {
 			var dtToday = new Date();
@@ -74,6 +125,45 @@
 			$('#mbirth').attr('max', maxDate);	 		
 		}
 		
+		// 이미지 변경 버튼
+		function onClickUpload() {
+			let myInput = document.getElementById("file");
+			myInput.click();
+		}
+		
+		// 기본 이미지로 바꾸는 버튼
+		function removeImage() {
+			console.log("remove");
+			$("#profileImg").attr("src", "/upload/displayFile?fileName=/default.png")
+			$("#mimage").val("default.png");		
+		}
+		
+		function getOriginalName(fileName) {
+			if(checkImageType(fileName)) {
+				return;
+			}
+			
+			const idx = fileName.indexOf("_") + 1;
+			return fileName.substr(idx);
+		}
+		
+		function getImageLink(fileName) {
+			if(!checkImageType(fileName)) {
+				return;
+			}
+			
+			const front = fileName.substr(0, 12);
+			const end = fileName.substr(14);
+			
+			return front + end; 
+		}
+		
+		function checkImageType(fileName) {
+			const pattern = /jpg|gif|png|jped/i;
+			return fileName.match(pattern);
+		}
+		
+		// 주소 API
 		function execPostCode() {
 	         new daum.Postcode({
 	             oncomplete: function(data) {
@@ -208,104 +298,50 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">프로필정보</button>
+                  <a href="/member/profile">
+                  	<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-overview">프로필정보</button>
+                  </a>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">프로필수정</button>
+                  <a href="/member/update">
+                  	<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-edit">프로필수정</button>
+                  </a>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">설정</button>
+                  <a href="/member/setting">
+                  	<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">설정</button>
+                  </a>
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">비밀번호변경</button>
+                  <a href="/member/changePassword">
+                  	<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">비밀번호변경</button>
+                  </a>
                 </li>
 
               </ul>
               <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                
-                  <div class="row">
-			        <div class="four col-md-4 mt-3">
-			            <div class="counter-box colored">
-			            	<span class="counter">${m.mvisitedcount}</span>
-			                <p>방문수</p>
-			            </div>
-			        </div>
-			        <div class="four col-md-4 mt-3">
-			            <div class="counter-box">
-			            	<span class="counter">${m.mcommentcount}</span>
-			                <p>댓글수</p>
-			            </div>
-			        </div>
-			        <div class="four col-md-4 mt-3">
-			            <div class="counter-box">
-			            	<span class="counter">${m.mboardcount}</span>
-			                <p>게시글수</p>
-			            </div>
-			        </div>
-			      </div>
-                  
-                  <h3 class="card-title">프로필</h3>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label ">별명(아이디)</div>
-                    <div class="col-lg-9 col-md-10">${m.mnickname} (${m.mid})</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label ">이름</div>
-                    <div class="col-lg-9 col-md-10">${m.mname}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label">생년월일</div>
-                    <div class="col-lg-9 col-md-10"><fmt:formatDate value="${m.mbirth}" pattern="yyyy-MM-dd" /></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label">성별</div>
-                    <div class="col-lg-9 col-md-10">${m.mgender}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label">이메일</div>
-                    <div class="col-lg-9 col-md-10">${m.memail}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label">전화번호</div>
-                    <div class="col-lg-9 col-md-10">${m.mphone}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label">주소</div>
-                    <div class="col-lg-9 col-md-10">(${m.mzip}) ${m.maddr1} ${m.maddr2}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-2 label">회원등급</div>
-                    <div class="col-lg-9 col-md-10">${m.mauthid}</div>
-                  </div>
-
-                </div>
-
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                <div class="tab-pane show active profile-overview profile-edit pt-3" id="profile-edit">
 
                   <!-- Profile Edit Form -->
                   <form id="updateForm">
                   	<input type="hidden" name="mno" id="mno" value="${m.mno}">
+                  	<input type="hidden" name="mimage" id="mimage" value="${m.mimage}">
                     <div class="row mb-3">
-                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">프로필 이미지</label>
                       <div class="col-md-8 col-lg-9">
-                        <img src="/assets/img/profile-img.jpg" alt="Profile">
-                        <div class="pt-2">
-                          <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                          <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                        </div>
+						<div class="uploadedList" style="width:100px; height:100px; border-radius:50%; background:gray;">
+							<img id="profileImg" src="/upload/displayFile?fileName=/${m.mimage}" 
+								 style="width:100px; height:100px; border-radius:50%;">
+						</div>
+						<div class="mt-2">
+							<input type="file" id="file" name="file" accept="image/*" style="display:none;">
+							<input class="btn btn-success btn-sm" type="button" onclick="onClickUpload()" value="이미지 변경">
+							<input class="btn btn-success btn-sm" type="button" onclick="removeImage()" value="삭제">
+						</div>
                       </div>
                     </div>
 
@@ -343,7 +379,6 @@
                       <label for="Country" class="col-md-4 col-lg-3 col-form-label">성별</label>
                       <div class="col-md-8 col-lg-9">
 	                      <select id="mgender" name="mgender" class="form-select your-input" aria-label="Default select example">
-	                        <option>성별</option>
 	                        <c:forEach var="list" items="${map}">
 	                        	<option value="${list.key}" <c:if test="${m.mgender eq list.key}">selected</c:if>>
 	                        		${list.value}

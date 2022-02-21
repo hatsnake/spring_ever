@@ -6,30 +6,30 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="member"/>
+		<item key="selection" value="alert"/>
 		<list key="findhistory">
+			<item value="alert"/>
+			<item value="card-body"/>
+			<item value="idCheck"/>
+			<item value="now1"/>
+			<item value="pageItemClick"/>
+			<item value="utils"/>
+			<item value="jackson"/>
+			<item value="json"/>
+			<item value="json-simple"/>
 			<item value="member"/>
+			<item value="commentlevel"/>
+			<item value="COMMENTLEVEL"/>
+			<item value="클릭"/>
 			<item value="commentCount"/>
 			<item value="${member.mid}"/>
-			<item value="$(this)"/>
-			<item value="this"/>
-			<item value="comment"/>
-			<item value="comment_inbox_text"/>
-			<item value="adj"/>
-			<item value="ad"/>
-			<item value="sendMessage"/>
-			<item value="userid"/>
-			<item value="heartCount"/>
-			<item value="java.lang.IllegalStateException: Optional int parameter &apos;ano&apos; is present but cannot be translated into a null value due to being declared as a primitive type. Consider declaring it as object wrapper for the corresponding primitive type."/>
-			<item value="text-dark"/>
-			<item value="add"/>
 		</list>
 		<list key="replacehistory">
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="646"/>
-		<item key="DIALOG_Y_ORIGIN" value="588"/>
+		<item key="DIALOG_X_ORIGIN" value="986"/>
+		<item key="DIALOG_Y_ORIGIN" value="586"/>
 		<item key="DIALOG_WIDTH" value="393"/>
 		<item key="DIALOG_HEIGHT" value="523"/>
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>

@@ -46,18 +46,19 @@
 			*
 		FROM (
 		    SELECT 
-		        E.ANO "ano",
-		        E.ACATEGORYNO "acategoryno",
-		        E.ACATEGORYNOREF "acategorynoref",
-		        E.ATITLE "atitle",
-		        E.ACONTENT "acontent",
-		        E.AINSERTDATE "ainsertdate",
-		        E.AVIEWCNT "aviewcnt",
+		        A.ANO "ano",
+		        A.ACATEGORYNO "acategoryno",
+		        A.ACATEGORYNOREF "acategorynoref",
+		        A.ATITLE "atitle",
+		        A.ACONTENT "acontent",
+		        A.AINSERTDATE "ainsertdate",
+		        A.AVIEWCNT "aviewcnt",
+		        A.ADELETEYN "adeleteyn",
 		        M.MNO "mno",
 		        M.MNICKNAME "mnickname",
-		        ROW_NUMBER() OVER(ORDER BY E.ANO DESC) "RNUM"
-		    FROM E_ARTICLE E, E_MEMBER M
-		    WHERE E.AWRITER = M.MNO
+		        ROW_NUMBER() OVER(ORDER BY A.ANO DESC) "RNUM"
+		    FROM E_ARTICLE A, E_MEMBER M
+		    WHERE A.AWRITER = M.MNO
 		    <include refid="search"></include>
 		)
 		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
@@ -114,7 +115,8 @@
 			A.AINSERTDATE "ainsertdate",
 			M.MNO "mno",
 			M.MID "mid",
-			M.MNICKNAME "mnickname"
+			M.MNICKNAME "mnickname",
+			M.MIMAGE "mimage"
 		FROM  E_ARTICLE A, E_MEMBER M
 		WHERE A.AWRITER = M.MNO 
 		AND   ANO = #{ano}
@@ -208,24 +210,25 @@
 		      *
 		    FROM (
 		        SELECT 
-		            A.CNO "cno",
-		            A.PCNO "pcno", 
-		            A.ANO "ano",
+		            C.CNO "cno",
+		            C.PCNO "pcno", 
+		            C.ANO "ano",
+		            C.CCONTENT "ccontent",
+		            C.CWRITER "cwriter",
+		            C.CDELETEYN "cdeleteyn",
+		            TO_CHAR(C.CINSERTDATE, 'yyyy.MM.dd. HH:mm') "cinsertdate",
 		            LEVEL "commentlevel",
-		            A.CCONTENT "ccontent",
-		            A.CWRITER "cwriter",
-		            TO_CHAR(A.CINSERTDATE, 'yyyy.MM.dd. HH:mm') "cinsertdate",
 		            M.MNICKNAME "mnickname",
+		            M.MIMAGE "mimage",
 		            ROWNUM "NUM"
-		        FROM E_COMMENT A, E_MEMBER M
-		        WHERE  A.CWRITER = M.MNO
+		        FROM E_COMMENT C, E_MEMBER M
+		        WHERE  C.CWRITER = M.MNO
 		        AND ANO = #{comment.ano}
-		        AND CDELETEYN = 'N'
 		        START WITH PCNO = 0 -- 시작형
 		        CONNECT BY PRIOR CNO = PCNO -- 연결
 		        ORDER SIBLINGS BY CNO DESC -- 정렬순서
-		    ) B
-		) C
+		    ) t1
+		) t2
 		WHERE NUM BETWEEN #{scri.rowStart} AND #{scri.rowEnd}	
 	</select>
 	

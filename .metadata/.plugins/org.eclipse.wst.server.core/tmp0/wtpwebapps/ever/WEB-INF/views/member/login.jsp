@@ -128,15 +128,14 @@
             <div class="col-xl-4 col-lg-5 col-md-7 col-sm-10 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">NiceAdmin</span>
+                <a href="/" class="logo d-flex align-items-center w-auto">
+                  <div style="font-weight:bold; font-size:50px; color:#23cb1a;">EVER</div>
                 </a>
               </div><!-- End Logo -->
 
-              <div class="card mb-3">
+              <div class="card mb-3" style="border: 1px solid #b7b2b2; box-shadow:none !important;">
 
-                <div class="card-body" style="margin: 80px 0 30px 0;">
+                <div class="card-body" style="margin:60px 0 30px 0;">
 
                   <form name="loginForm" action="/member/login" method="post" class="row g-3 needs-validation" novalidate>
 
@@ -162,18 +161,20 @@
                       </div>
                     </div>
 
+					<!--  
                     <div class="col-12">
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
                         <label class="form-check-label" for="rememberMe">로그인 상태 유지</label>
                       </div>
                     </div>
+                    -->
                     
                     <c:if test="${msg == false}">
                     	<p style="color:red;">로그인 실패! 아이디와 비밀번호 확인해주세요!</p>
                     </c:if>
                     
-                    <div class="col-12">
+                    <div class="col-12 mt-4">
                       <button id="loginBtn" class="btn btn-primary w-100" type="submit">로그인</button>
                     </div>
                   </form>

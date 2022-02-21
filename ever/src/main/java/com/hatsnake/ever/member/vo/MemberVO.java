@@ -12,6 +12,7 @@ public class MemberVO {
 	private String mname;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date mbirth;
+	private String mimage;
 	private String mgender;
 	private String memail;
 	private String mphone;
@@ -22,6 +23,7 @@ public class MemberVO {
 	private int mcommentcount;
 	private int mboardcount;
 	private String mauthid;
+	private Date mvisiteddate;
 	private Date minsertdate;
 	private String minsertip;
 	private Date mupdatedate;
@@ -35,20 +37,18 @@ public class MemberVO {
 		
 	}
 
-	public MemberVO(int mno, String mid, String mpassword, 
-					String mnickname, String mname, Date mbirth, 
-					String mgender, String memail, String mphone, 
-					String mzip, String maddr1, String maddr2, 
-					int mvisitedcount, int mcommentcount, int mboardcount, 
-					String mauthid, Date minsertdate, String minsertip, 
-					Date mupdatedate, String mupdateip, String mupdateid, 
-					String mdeleteyn, Date mdeletedate, String mdeleteid) {
+	public MemberVO(int mno, String mid, String mpassword, String mnickname, String mname, Date mbirth, String mimage,
+			String mgender, String memail, String mphone, String mzip, String maddr1, String maddr2, int mvisitedcount,
+			int mcommentcount, int mboardcount, String mauthid, Date mvisiteddate, Date minsertdate, String minsertip,
+			Date mupdatedate, String mupdateip, String mupdateid, String mdeleteyn, Date mdeletedate,
+			String mdeleteid) {
 		this.mno = mno;
 		this.mid = mid;
 		this.mpassword = mpassword;
 		this.mnickname = mnickname;
 		this.mname = mname;
 		this.mbirth = mbirth;
+		this.mimage = mimage;
 		this.mgender = mgender;
 		this.memail = memail;
 		this.mphone = mphone;
@@ -59,6 +59,7 @@ public class MemberVO {
 		this.mcommentcount = mcommentcount;
 		this.mboardcount = mboardcount;
 		this.mauthid = mauthid;
+		this.mvisiteddate = mvisiteddate;
 		this.minsertdate = minsertdate;
 		this.minsertip = minsertip;
 		this.mupdatedate = mupdatedate;
@@ -115,6 +116,14 @@ public class MemberVO {
 
 	public void setMbirth(Date mbirth) {
 		this.mbirth = mbirth;
+	}
+
+	public String getMimage() {
+		return mimage;
+	}
+
+	public void setMimage(String mimage) {
+		this.mimage = mimage;
 	}
 
 	public String getMgender() {
@@ -261,15 +270,24 @@ public class MemberVO {
 		this.mdeleteid = mdeleteid;
 	}
 
+	public Date getMvisiteddate() {
+		return mvisiteddate;
+	}
+
+	public void setMvisiteddate(Date mvisiteddate) {
+		this.mvisiteddate = mvisiteddate;
+	}
+
 	@Override
 	public String toString() {
 		return "MemberVO [mno=" + mno + ", mid=" + mid + ", mpassword=" + mpassword + ", mnickname=" + mnickname
-				+ ", mname=" + mname + ", mbirth=" + mbirth + ", mgender=" + mgender + ", memail=" + memail
-				+ ", mphone=" + mphone + ", mzip=" + mzip + ", maddr1=" + maddr1 + ", maddr2=" + maddr2
-				+ ", mvisitedcount=" + mvisitedcount + ", mcommentcount=" + mcommentcount + ", mboardcount="
-				+ mboardcount + ", mauthid=" + mauthid + ", minsertdate=" + minsertdate + ", minsertip=" + minsertip
-				+ ", mupdatedate=" + mupdatedate + ", mupdateip=" + mupdateip + ", mupdateid=" + mupdateid
-				+ ", mdeleteyn=" + mdeleteyn + ", mdeletedate=" + mdeletedate + ", mdeleteid=" + mdeleteid + "]";
+				+ ", mname=" + mname + ", mbirth=" + mbirth + ", mimage=" + mimage + ", mgender=" + mgender
+				+ ", memail=" + memail + ", mphone=" + mphone + ", mzip=" + mzip + ", maddr1=" + maddr1 + ", maddr2="
+				+ maddr2 + ", mvisitedcount=" + mvisitedcount + ", mcommentcount=" + mcommentcount + ", mboardcount="
+				+ mboardcount + ", mauthid=" + mauthid + ", mvisiteddate=" + mvisiteddate + ", minsertdate="
+				+ minsertdate + ", minsertip=" + minsertip + ", mupdatedate=" + mupdatedate + ", mupdateip=" + mupdateip
+				+ ", mupdateid=" + mupdateid + ", mdeleteyn=" + mdeleteyn + ", mdeletedate=" + mdeletedate
+				+ ", mdeleteid=" + mdeleteid + "]";
 	}
 	
 }
